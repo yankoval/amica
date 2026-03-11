@@ -1,0 +1,13 @@
+{
+  "Product_article":"Product_article",
+  "Product_gtin":"Product_gtin",
+  "Product_gost": "Product_gost",
+  "Product_name_part1": "Product_name_part1",
+  "Product_name_part2": "Product_name_part2",
+  "Product_name_part3": "Product_name_part3",
+  "Product_PackInfo":"Product_PackInfo",
+  "Batch_number":"Batch_number",
+  "Batch_BN_1С":"Batch_BN_1С",
+  "Batch_date_packing_descr":"Batch_date_packing_descr",
+  "Batch_date_expired_descr":"Batch_date_expired_descr"
+}
