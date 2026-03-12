@@ -1,0 +1,1173 @@
+<?xml version='1.0' encoding='utf-8'?>
+<File Format="Amica.VDF" Version="3.0" MagicPageVersionInfo="3.7.0.26" HexTextTemp="1" Type="Monochroic">
+  <VDPPage Elements="19">
+    <Beeline FullName="Amica.Vdp.Element.Beeline.BeelineElement">
+      <Rect X="0.5364604" Y="2.306969" Width="0.6015711" Height="0"></Rect>
+      <Line>
+        <LineColor C="0" M="0" Y="0" K="100"></LineColor>
+        <LineWidth>0.25</LineWidth>
+        <LineStyle>Solid</LineStyle>
+      </Line>
+      <ZOrder>20</ZOrder>
+      <RotateAngle>0</RotateAngle>
+      <Visible>true</Visible>
+      <Overprint>false</Overprint>
+      <IsTransparent>true</IsTransparent>
+      <Density>100</Density>
+    </Beeline>
+    <Group FullName="Amica.Vdp.Common.Element.ElementGroup">
+      <StaticText FullName="Amica.Vdp.Common.Element.VdpStaticText">
+        <DisplayType>Text</DisplayType>
+        <Mirror>None</Mirror>
+        <Rect X="0.7399552" Y="3.059257" Width="0.7066666" Height="0.1393333"></Rect>
+        <IsDisplayBorder>false</IsDisplayBorder>
+        <IsReverseColor>false</IsReverseColor>
+        <Text>
+          <Content><![CDATA[383036343633]]></Content>
+          <ForeColor A="255" R="0" G="0" B="0"></ForeColor>
+          <TextFont>
+            <Name>Microsoft Sans Serif</Name>
+            <Size>8</Size>
+            <Style>Regular</Style>
+          </TextFont>
+          <Alignment_H>Left</Alignment_H>
+          <Alignment_V>Top</Alignment_V>
+          <FontScale>1</FontScale>
+          <IsConvertNumberToWord>false</IsConvertNumberToWord>
+          <GapSpaceNum>0</GapSpaceNum>
+          <CharacterInterval>0</CharacterInterval>
+          <LineSpace>0</LineSpace>
+        </Text>
+        <Line>
+          <LineColor C="0" M="0" Y="0" K="100"></LineColor>
+          <LineWidth>0.25</LineWidth>
+          <LineStyle>Solid</LineStyle>
+        </Line>
+        <ZOrder>15</ZOrder>
+        <Alias>12</Alias>
+        <RotateAngle>90</RotateAngle>
+        <Visible>false</Visible>
+        <IsAutoSize>false</IsAutoSize>
+        <IsAutoWrap>false</IsAutoWrap>
+        <IsAutoScale>false</IsAutoScale>
+        <IsTransparent>true</IsTransparent>
+        <IsKeyElement>false</IsKeyElement>
+        <IsValueElement>false</IsValueElement>
+        <IsFilled>true</IsFilled>
+        <Overprint>false</Overprint>
+        <InPage>false</InPage>
+        <Density>100</Density>
+        <RecordOrder>0</RecordOrder>
+      </StaticText>
+      <StaticText FullName="Amica.Vdp.Common.Element.VdpStaticText">
+        <DisplayType>Text</DisplayType>
+        <Mirror>None</Mirror>
+        <Rect X="0.8957884" Y="2.467168" Width="0.395" Height="0.1063333"></Rect>
+        <IsDisplayBorder>false</IsDisplayBorder>
+        <IsReverseColor>false</IsReverseColor>
+        <Text>
+          <Content><![CDATA[424E20D0BFD1802DD0B2D0BE203A]]></Content>
+          <ForeColor A="255" R="0" G="0" B="0"></ForeColor>
+          <TextFont>
+            <Name>Microsoft Sans Serif</Name>
+            <Size>6</Size>
+            <Style>Regular</Style>
+          </TextFont>
+          <Alignment_H>Left</Alignment_H>
+          <Alignment_V>Top</Alignment_V>
+          <FontScale>1</FontScale>
+          <IsConvertNumberToWord>false</IsConvertNumberToWord>
+          <GapSpaceNum>0</GapSpaceNum>
+          <CharacterInterval>0</CharacterInterval>
+          <LineSpace>0</LineSpace>
+        </Text>
+        <Line>
+          <LineColor C="0" M="0" Y="0" K="100"></LineColor>
+          <LineWidth>0.25</LineWidth>
+          <LineStyle>Solid</LineStyle>
+        </Line>
+        <ZOrder>16</ZOrder>
+        <Alias>16</Alias>
+        <RotateAngle>90</RotateAngle>
+        <Visible>false</Visible>
+        <IsAutoSize>true</IsAutoSize>
+        <IsAutoWrap>false</IsAutoWrap>
+        <IsAutoScale>false</IsAutoScale>
+        <IsTransparent>true</IsTransparent>
+        <IsKeyElement>false</IsKeyElement>
+        <IsValueElement>false</IsValueElement>
+        <IsFilled>true</IsFilled>
+        <Overprint>false</Overprint>
+        <InPage>false</InPage>
+        <Density>100</Density>
+        <RecordOrder>0</RecordOrder>
+      </StaticText>
+      <Rect X="1.023622" Y="2.322834" Width="0.1393332" Height="1.159422"></Rect>
+      <Line>
+        <LineColor C="0" M="0" Y="0" K="100"></LineColor>
+        <LineWidth>0.25</LineWidth>
+        <LineStyle>Solid</LineStyle>
+      </Line>
+      <ZOrder>22</ZOrder>
+      <Alias>19</Alias>
+      <RotateAngle>0</RotateAngle>
+      <Visible>true</Visible>
+      <IsAutoSize>true</IsAutoSize>
+      <IsAutoWrap>false</IsAutoWrap>
+      <IsAutoScale>false</IsAutoScale>
+      <IsTransparent>true</IsTransparent>
+      <IsKeyElement>false</IsKeyElement>
+      <IsValueElement>false</IsValueElement>
+      <IsFilled>true</IsFilled>
+      <Overprint>false</Overprint>
+      <InPage>false</InPage>
+      <Density>100</Density>
+      <RecordOrder>0</RecordOrder>
+    </Group>
+    <Group FullName="Amica.Vdp.Common.Element.ElementGroup">
+      <StaticText FullName="Amica.Vdp.Common.Element.VdpStaticText">
+        <DisplayType>Text</DisplayType>
+        <Mirror>None</Mirror>
+        <Rect X="0.7610681" Y="2.414834" Width="0.3966667" Height="0.2126667"></Rect>
+        <IsDisplayBorder>false</IsDisplayBorder>
+        <IsReverseColor>false</IsReverseColor>
+        <Text>
+          <Content><![CDATA[D093D0BED0B4D0B5D0BD20D0B4D0BE203A0AD0BFD1802DD0B2D0BE203A]]></Content>
+          <ForeColor A="255" R="0" G="0" B="0"></ForeColor>
+          <TextFont>
+            <Name>Microsoft Sans Serif</Name>
+            <Size>6</Size>
+            <Style>Regular</Style>
+          </TextFont>
+          <Alignment_H>Left</Alignment_H>
+          <Alignment_V>Top</Alignment_V>
+          <FontScale>1</FontScale>
+          <IsConvertNumberToWord>false</IsConvertNumberToWord>
+          <GapSpaceNum>0</GapSpaceNum>
+          <CharacterInterval>0</CharacterInterval>
+          <LineSpace>0</LineSpace>
+        </Text>
+        <Line>
+          <LineColor C="0" M="0" Y="0" K="100"></LineColor>
+          <LineWidth>0.25</LineWidth>
+          <LineStyle>Solid</LineStyle>
+        </Line>
+        <ZOrder>17</ZOrder>
+        <Alias>16</Alias>
+        <RotateAngle>90</RotateAngle>
+        <Visible>false</Visible>
+        <IsAutoSize>true</IsAutoSize>
+        <IsAutoWrap>false</IsAutoWrap>
+        <IsAutoScale>false</IsAutoScale>
+        <IsTransparent>true</IsTransparent>
+        <IsKeyElement>false</IsKeyElement>
+        <IsValueElement>false</IsValueElement>
+        <IsFilled>true</IsFilled>
+        <Overprint>false</Overprint>
+        <InPage>false</InPage>
+        <Density>100</Density>
+        <RecordOrder>0</RecordOrder>
+      </StaticText>
+      <StaticText FullName="Amica.Vdp.Common.Element.VdpStaticText">
+        <DisplayType>Text</DisplayType>
+        <Mirror>None</Mirror>
+        <Rect X="0.305886" Y="3.158678" Width="1.181103" Height="0.1393332"></Rect>
+        <IsDisplayBorder>false</IsDisplayBorder>
+        <IsReverseColor>false</IsReverseColor>
+        <Text>
+          <Content><![CDATA[33302E30312E32303236]]></Content>
+          <ForeColor A="255" R="0" G="0" B="0"></ForeColor>
+          <TextFont>
+            <Name>Microsoft Sans Serif</Name>
+            <Size>6</Size>
+            <Style>Regular</Style>
+          </TextFont>
+          <Alignment_H>Left</Alignment_H>
+          <Alignment_V>Top</Alignment_V>
+          <FontScale>1</FontScale>
+          <IsConvertNumberToWord>false</IsConvertNumberToWord>
+          <GapSpaceNum>0</GapSpaceNum>
+          <CharacterInterval>0</CharacterInterval>
+          <LineSpace>0</LineSpace>
+        </Text>
+        <Line>
+          <LineColor C="0" M="0" Y="0" K="100"></LineColor>
+          <LineWidth>0.25</LineWidth>
+          <LineStyle>Solid</LineStyle>
+        </Line>
+        <ZOrder>18</ZOrder>
+        <Alias>12</Alias>
+        <RotateAngle>90</RotateAngle>
+        <Visible>false</Visible>
+        <IsAutoSize>false</IsAutoSize>
+        <IsAutoWrap>false</IsAutoWrap>
+        <IsAutoScale>false</IsAutoScale>
+        <IsTransparent>true</IsTransparent>
+        <IsKeyElement>false</IsKeyElement>
+        <IsValueElement>false</IsValueElement>
+        <IsFilled>true</IsFilled>
+        <Overprint>false</Overprint>
+        <InPage>false</InPage>
+        <Density>100</Density>
+        <RecordOrder>0</RecordOrder>
+      </StaticText>
+      <StaticText FullName="Amica.Vdp.Common.Element.VdpStaticText">
+        <DisplayType>Text</DisplayType>
+        <Mirror>None</Mirror>
+        <Rect X="0.3846273" Y="3.276787" Width="1.181103" Height="0.1393332"></Rect>
+        <IsDisplayBorder>false</IsDisplayBorder>
+        <IsReverseColor>false</IsReverseColor>
+        <Text>
+          <Content><![CDATA[30312E32303238]]></Content>
+          <ForeColor A="255" R="0" G="0" B="0"></ForeColor>
+          <TextFont>
+            <Name>Microsoft Sans Serif</Name>
+            <Size>6</Size>
+            <Style>Regular</Style>
+          </TextFont>
+          <Alignment_H>Left</Alignment_H>
+          <Alignment_V>Top</Alignment_V>
+          <FontScale>1</FontScale>
+          <IsConvertNumberToWord>false</IsConvertNumberToWord>
+          <GapSpaceNum>0</GapSpaceNum>
+          <CharacterInterval>0</CharacterInterval>
+          <LineSpace>0</LineSpace>
+        </Text>
+        <Line>
+          <LineColor C="0" M="0" Y="0" K="100"></LineColor>
+          <LineWidth>0.25</LineWidth>
+          <LineStyle>Solid</LineStyle>
+        </Line>
+        <ZOrder>19</ZOrder>
+        <Alias>12</Alias>
+        <RotateAngle>90</RotateAngle>
+        <Visible>false</Visible>
+        <IsAutoSize>false</IsAutoSize>
+        <IsAutoWrap>false</IsAutoWrap>
+        <IsAutoScale>false</IsAutoScale>
+        <IsTransparent>true</IsTransparent>
+        <IsKeyElement>false</IsKeyElement>
+        <IsValueElement>false</IsValueElement>
+        <IsFilled>true</IsFilled>
+        <Overprint>false</Overprint>
+        <InPage>false</InPage>
+        <Density>100</Density>
+        <RecordOrder>0</RecordOrder>
+      </StaticText>
+      <Rect X="0.8267705" Y="2.322834" Width="0.2389642" Height="1.614172"></Rect>
+      <Line>
+        <LineColor C="0" M="0" Y="0" K="100"></LineColor>
+        <LineWidth>0.25</LineWidth>
+        <LineStyle>Solid</LineStyle>
+      </Line>
+      <ZOrder>23</ZOrder>
+      <Alias>20</Alias>
+      <RotateAngle>0</RotateAngle>
+      <Visible>true</Visible>
+      <IsAutoSize>true</IsAutoSize>
+      <IsAutoWrap>false</IsAutoWrap>
+      <IsAutoScale>false</IsAutoScale>
+      <IsTransparent>true</IsTransparent>
+      <IsKeyElement>false</IsKeyElement>
+      <IsValueElement>false</IsValueElement>
+      <IsFilled>true</IsFilled>
+      <Overprint>false</Overprint>
+      <InPage>false</InPage>
+      <Density>100</Density>
+      <RecordOrder>0</RecordOrder>
+    </Group>
+    <StaticText FullName="Amica.Vdp.Common.Element.VdpStaticText">
+      <DisplayType>Text</DisplayType>
+      <Mirror>None</Mirror>
+      <Rect X="0.5627056" Y="0.4805982" Width="1.066667" Height="0.1448333"></Rect>
+      <IsDisplayBorder>false</IsDisplayBorder>
+      <IsReverseColor>false</IsReverseColor>
+      <Text>
+        <Content><![CDATA[D091D0B0D0BBD18CD0B7D0B0D0BC20D0B4D0BBD18F20D0B2D0BED0BBD0BED181]]></Content>
+        <ForeColor A="255" R="0" G="0" B="0"></ForeColor>
+        <TextFont>
+          <Name>Microsoft Sans Serif</Name>
+          <Size>8.25</Size>
+          <Style>Regular</Style>
+        </TextFont>
+        <Alignment_H>Left</Alignment_H>
+        <Alignment_V>Top</Alignment_V>
+        <FontScale>1</FontScale>
+        <IsConvertNumberToWord>false</IsConvertNumberToWord>
+        <GapSpaceNum>0</GapSpaceNum>
+        <CharacterInterval>0</CharacterInterval>
+        <LineSpace>0</LineSpace>
+      </Text>
+      <Line>
+        <LineColor C="0" M="0" Y="0" K="100"></LineColor>
+        <LineWidth>0.25</LineWidth>
+        <LineStyle>Solid</LineStyle>
+      </Line>
+      <ZOrder>2</ZOrder>
+      <Alias>12</Alias>
+      <RotateAngle>90</RotateAngle>
+      <Visible>true</Visible>
+      <IsAutoSize>true</IsAutoSize>
+      <IsAutoWrap>false</IsAutoWrap>
+      <IsAutoScale>false</IsAutoScale>
+      <IsTransparent>true</IsTransparent>
+      <IsKeyElement>false</IsKeyElement>
+      <IsValueElement>false</IsValueElement>
+      <IsFilled>true</IsFilled>
+      <Overprint>false</Overprint>
+      <InPage>false</InPage>
+      <Density>100</Density>
+      <RecordOrder>0</RecordOrder>
+    </StaticText>
+    <StaticText FullName="Amica.Vdp.Common.Element.VdpStaticText">
+      <DisplayType>Text</DisplayType>
+      <Mirror>None</Mirror>
+      <Rect X="-0.03799975" Y="1.49469" Width="1.338583" Height="0.2783337"></Rect>
+      <IsDisplayBorder>false</IsDisplayBorder>
+      <IsReverseColor>false</IsReverseColor>
+      <Text>
+        <Content><![CDATA[313035352D30302D303230]]></Content>
+        <ForeColor A="255" R="0" G="0" B="0"></ForeColor>
+        <TextFont>
+          <Name>Microsoft Sans Serif</Name>
+          <Size>16</Size>
+          <Style>Bold</Style>
+        </TextFont>
+        <Alignment_H>Left</Alignment_H>
+        <Alignment_V>Top</Alignment_V>
+        <FontScale>1</FontScale>
+        <IsConvertNumberToWord>false</IsConvertNumberToWord>
+        <GapSpaceNum>0</GapSpaceNum>
+        <CharacterInterval>0</CharacterInterval>
+        <LineSpace>0</LineSpace>
+      </Text>
+      <Line>
+        <LineColor C="0" M="0" Y="0" K="100"></LineColor>
+        <LineWidth>0.25</LineWidth>
+        <LineStyle>Solid</LineStyle>
+      </Line>
+      <ZOrder>3</ZOrder>
+      <Alias>13</Alias>
+      <RotateAngle>90</RotateAngle>
+      <Visible>true</Visible>
+      <IsAutoSize>false</IsAutoSize>
+      <IsAutoWrap>false</IsAutoWrap>
+      <IsAutoScale>false</IsAutoScale>
+      <IsTransparent>true</IsTransparent>
+      <IsKeyElement>false</IsKeyElement>
+      <IsValueElement>false</IsValueElement>
+      <IsFilled>true</IsFilled>
+      <Overprint>false</Overprint>
+      <InPage>false</InPage>
+      <Density>100</Density>
+      <RecordOrder>0</RecordOrder>
+    </StaticText>
+    <StaticText FullName="Amica.Vdp.Common.Element.VdpStaticText">
+      <DisplayType>Text</DisplayType>
+      <Mirror>None</Mirror>
+      <Rect X="0.4445952" Y="0.4806015" Width="1.066667" Height="0.1448333"></Rect>
+      <IsDisplayBorder>false</IsDisplayBorder>
+      <IsReverseColor>false</IsReverseColor>
+      <Text>
+        <Content><![CDATA[D0BAD0B5D180D0B0D182D0B8D0BDD0BED0B2D18BD0B920D0A2D0BED182D0B0D0BBD18CD0BDD0BED0B520D0B2D0BED181D181D182D0B0D0BDD0BED0B2D0BBD0B5D0BDD0B8D0B5]]></Content>
+        <ForeColor A="255" R="0" G="0" B="0"></ForeColor>
+        <TextFont>
+          <Name>Microsoft Sans Serif</Name>
+          <Size>8.25</Size>
+          <Style>Regular</Style>
+        </TextFont>
+        <Alignment_H>Left</Alignment_H>
+        <Alignment_V>Top</Alignment_V>
+        <FontScale>1</FontScale>
+        <IsConvertNumberToWord>false</IsConvertNumberToWord>
+        <GapSpaceNum>0</GapSpaceNum>
+        <CharacterInterval>0</CharacterInterval>
+        <LineSpace>0</LineSpace>
+      </Text>
+      <Line>
+        <LineColor C="0" M="0" Y="0" K="100"></LineColor>
+        <LineWidth>0.25</LineWidth>
+        <LineStyle>Solid</LineStyle>
+      </Line>
+      <ZOrder>4</ZOrder>
+      <Alias>12</Alias>
+      <RotateAngle>90</RotateAngle>
+      <Visible>true</Visible>
+      <IsAutoSize>true</IsAutoSize>
+      <IsAutoWrap>false</IsAutoWrap>
+      <IsAutoScale>false</IsAutoScale>
+      <IsTransparent>true</IsTransparent>
+      <IsKeyElement>false</IsKeyElement>
+      <IsValueElement>false</IsValueElement>
+      <IsFilled>true</IsFilled>
+      <Overprint>false</Overprint>
+      <InPage>false</InPage>
+      <Density>100</Density>
+      <RecordOrder>0</RecordOrder>
+    </StaticText>
+    <StaticText FullName="Amica.Vdp.Common.Element.VdpStaticText">
+      <DisplayType>Text</DisplayType>
+      <Mirror>None</Mirror>
+      <Rect X="0.2524301" Y="1.243633" Width="1.096667" Height="0.1448333"></Rect>
+      <IsDisplayBorder>false</IsDisplayBorder>
+      <IsReverseColor>false</IsReverseColor>
+      <Text>
+        <Content><![CDATA[D0A1D0A2D09C20D092D0BAD183D181D092D0B8D0BBD0BB]]></Content>
+        <ForeColor A="255" R="0" G="0" B="0"></ForeColor>
+        <TextFont>
+          <Name>Microsoft Sans Serif</Name>
+          <Size>8.25</Size>
+          <Style>Bold</Style>
+        </TextFont>
+        <Alignment_H>Left</Alignment_H>
+        <Alignment_V>Top</Alignment_V>
+        <FontScale>1</FontScale>
+        <IsConvertNumberToWord>false</IsConvertNumberToWord>
+        <GapSpaceNum>0</GapSpaceNum>
+        <CharacterInterval>0</CharacterInterval>
+        <LineSpace>0</LineSpace>
+      </Text>
+      <Line>
+        <LineColor C="0" M="0" Y="0" K="100"></LineColor>
+        <LineWidth>0.25</LineWidth>
+        <LineStyle>Solid</LineStyle>
+      </Line>
+      <ZOrder>5</ZOrder>
+      <Alias>12</Alias>
+      <RotateAngle>90</RotateAngle>
+      <Visible>true</Visible>
+      <IsAutoSize>true</IsAutoSize>
+      <IsAutoWrap>false</IsAutoWrap>
+      <IsAutoScale>false</IsAutoScale>
+      <IsTransparent>true</IsTransparent>
+      <IsKeyElement>false</IsKeyElement>
+      <IsValueElement>false</IsValueElement>
+      <IsFilled>true</IsFilled>
+      <Overprint>false</Overprint>
+      <InPage>false</InPage>
+      <Density>100</Density>
+      <RecordOrder>0</RecordOrder>
+    </StaticText>
+    <StaticText FullName="Amica.Vdp.Common.Element.VdpStaticText">
+      <DisplayType>Barcode</DisplayType>
+      <Mirror>None</Mirror>
+      <DoVerification>false</DoVerification>
+      <Rect X="-0.3701494" Y="3.14574" Width="1.201693" Height="0.4613941"></Rect>
+      <IsDisplayBorder>false</IsDisplayBorder>
+      <IsReverseColor>false</IsReverseColor>
+      <Text>
+        <Content><![CDATA[34363130313137363633343932]]></Content>
+        <ForeColor A="255" R="0" G="0" B="0"></ForeColor>
+        <TextFont>
+          <Name>Microsoft Sans Serif</Name>
+          <Size>8.25</Size>
+          <Style>Regular</Style>
+        </TextFont>
+        <Alignment_H>Left</Alignment_H>
+        <Alignment_V>Top</Alignment_V>
+        <FontScale>1</FontScale>
+        <IsConvertNumberToWord>false</IsConvertNumberToWord>
+        <GapSpaceNum>0</GapSpaceNum>
+        <CharacterInterval>0</CharacterInterval>
+        <LineSpace>0</LineSpace>
+      </Text>
+      <TBarcode FullName="Amica.Vdp.Common.TEan13">
+        <BarcodeTypeShell>Ean13</BarcodeTypeShell>
+        <BarcodeType>Ean13</BarcodeType>
+        <ModuleWidth>0.01062992</ModuleWidth>
+        <FixedModuleWidth>false</FixedModuleWidth>
+        <WHWithScale>false</WHWithScale>
+        <PrintRatio></PrintRatio>
+        <TextDistance>0</TextDistance>
+        <BarWidthReduction>0</BarWidthReduction>
+        <BarWidthReductionUnit>Percent</BarWidthReductionUnit>
+        <IsShowText>true</IsShowText>
+        <IsTextAbove>false</IsTextAbove>
+        <IsCustDrawText>false</IsCustDrawText>
+        <IsTextFormat>false</IsTextFormat>
+        <CustAlignment>Center</CustAlignment>
+        <CheckdigitMethod>Standard</CheckdigitMethod>
+        <EncodingMode>CodePage</EncodingMode>
+        <CodePage>Default</CodePage>
+        <TranslateEscapeSequences>false</TranslateEscapeSequences>
+        <OnlyFixedModuleWidth>false</OnlyFixedModuleWidth>
+        <BarSize Width="1.201693" Height="0.4613941"></BarSize>
+        <CodeFont>
+          <Name>Microsoft Sans Serif</Name>
+          <Size>9</Size>
+          <Style>Regular</Style>
+        </CodeFont>
+        <TextFormat FullName="Amica.Vdp.Common.TextFormat">
+          <MaskFormat></MaskFormat>
+          <Padding xml:space="preserve">*</Padding>
+          <PaddingLeading>true</PaddingLeading>
+        </TextFormat>
+        <Format></Format>
+        <FormatFlag>false</FormatFlag>
+        <UseRainbow>false</UseRainbow>
+        <CompositeComponentTypes>None</CompositeComponentTypes>
+      </TBarcode>
+      <Line>
+        <LineColor C="0" M="0" Y="0" K="100"></LineColor>
+        <LineWidth>0.25</LineWidth>
+        <LineStyle>Solid</LineStyle>
+      </Line>
+      <ZOrder>6</ZOrder>
+      <Alias>15</Alias>
+      <RotateAngle>90</RotateAngle>
+      <Visible>true</Visible>
+      <IsAutoSize>true</IsAutoSize>
+      <IsAutoWrap>false</IsAutoWrap>
+      <IsAutoScale>false</IsAutoScale>
+      <IsTransparent>false</IsTransparent>
+      <IsKeyElement>false</IsKeyElement>
+      <IsValueElement>false</IsValueElement>
+      <IsFilled>true</IsFilled>
+      <Overprint>false</Overprint>
+      <InPage>false</InPage>
+      <Density>100</Density>
+      <RecordOrder>0</RecordOrder>
+    </StaticText>
+    <StaticText FullName="Amica.Vdp.Common.Element.VdpStaticText">
+      <DisplayType>Text</DisplayType>
+      <Mirror>None</Mirror>
+      <Rect X="0.2789402" Y="2.96909" Width="0.4933333" Height="0.1063333"></Rect>
+      <IsDisplayBorder>false</IsDisplayBorder>
+      <IsReverseColor>false</IsReverseColor>
+      <Text>
+        <Content><![CDATA[D093D09ED0A1D0A22033313436302D32303132]]></Content>
+        <ForeColor A="255" R="0" G="0" B="0"></ForeColor>
+        <TextFont>
+          <Name>Microsoft Sans Serif</Name>
+          <Size>6</Size>
+          <Style>Regular</Style>
+        </TextFont>
+        <Alignment_H>Left</Alignment_H>
+        <Alignment_V>Top</Alignment_V>
+        <FontScale>1</FontScale>
+        <IsConvertNumberToWord>false</IsConvertNumberToWord>
+        <GapSpaceNum>0</GapSpaceNum>
+        <CharacterInterval>0</CharacterInterval>
+        <LineSpace>0</LineSpace>
+      </Text>
+      <Line>
+        <LineColor C="0" M="0" Y="0" K="100"></LineColor>
+        <LineWidth>0.25</LineWidth>
+        <LineStyle>Solid</LineStyle>
+      </Line>
+      <ZOrder>8</ZOrder>
+      <Alias>12</Alias>
+      <RotateAngle>90</RotateAngle>
+      <Visible>true</Visible>
+      <IsAutoSize>true</IsAutoSize>
+      <IsAutoWrap>false</IsAutoWrap>
+      <IsAutoScale>false</IsAutoScale>
+      <IsTransparent>true</IsTransparent>
+      <IsKeyElement>false</IsKeyElement>
+      <IsValueElement>false</IsValueElement>
+      <IsFilled>true</IsFilled>
+      <Overprint>false</Overprint>
+      <InPage>false</InPage>
+      <Density>100</Density>
+      <RecordOrder>0</RecordOrder>
+    </StaticText>
+    <StaticText FullName="Amica.Vdp.Common.Element.VdpStaticText">
+      <DisplayType>Text</DisplayType>
+      <Mirror>None</Mirror>
+      <Rect X="0.2889516" Y="2.644118" Width="0.7874016" Height="0.1448334"></Rect>
+      <IsDisplayBorder>false</IsDisplayBorder>
+      <IsReverseColor>false</IsReverseColor>
+      <Text>
+        <Content><![CDATA[323020D188D18220D1852032383020D0BCD0BB]]></Content>
+        <ForeColor A="255" R="0" G="0" B="0"></ForeColor>
+        <TextFont>
+          <Name>Microsoft Sans Serif</Name>
+          <Size>7</Size>
+          <Style>Bold</Style>
+        </TextFont>
+        <Alignment_H>Left</Alignment_H>
+        <Alignment_V>Top</Alignment_V>
+        <FontScale>1</FontScale>
+        <IsConvertNumberToWord>false</IsConvertNumberToWord>
+        <GapSpaceNum>0</GapSpaceNum>
+        <CharacterInterval>0</CharacterInterval>
+        <LineSpace>0</LineSpace>
+      </Text>
+      <Line>
+        <LineColor C="0" M="0" Y="0" K="100"></LineColor>
+        <LineWidth>0.25</LineWidth>
+        <LineStyle>Solid</LineStyle>
+      </Line>
+      <ZOrder>9</ZOrder>
+      <Alias>12</Alias>
+      <RotateAngle>90</RotateAngle>
+      <Visible>true</Visible>
+      <IsAutoSize>false</IsAutoSize>
+      <IsAutoWrap>false</IsAutoWrap>
+      <IsAutoScale>false</IsAutoScale>
+      <IsTransparent>true</IsTransparent>
+      <IsKeyElement>false</IsKeyElement>
+      <IsValueElement>false</IsValueElement>
+      <IsFilled>true</IsFilled>
+      <Overprint>false</Overprint>
+      <InPage>false</InPage>
+      <Density>100</Density>
+      <RecordOrder>0</RecordOrder>
+    </StaticText>
+    <StaticText FullName="Amica.Vdp.Common.Element.VdpStaticText">
+      <DisplayType>Barcode</DisplayType>
+      <Mirror>None</Mirror>
+      <DoVerification>false</DoVerification>
+      <Rect X="-0.7389765" Y="1.506693" Width="1.989764" Height="0.511811"></Rect>
+      <IsDisplayBorder>false</IsDisplayBorder>
+      <IsReverseColor>false</IsReverseColor>
+      <Text>
+        <Content><![CDATA[3436313031313736363335303830313031]]></Content>
+        <ForeColor A="255" R="0" G="0" B="0"></ForeColor>
+        <TextFont>
+          <Name>Microsoft Sans Serif</Name>
+          <Size>8.25</Size>
+          <Style>Regular</Style>
+        </TextFont>
+        <Alignment_H>Left</Alignment_H>
+        <Alignment_V>Top</Alignment_V>
+        <FontScale>1</FontScale>
+        <IsConvertNumberToWord>false</IsConvertNumberToWord>
+        <GapSpaceNum>0</GapSpaceNum>
+        <CharacterInterval>0</CharacterInterval>
+        <LineSpace>0</LineSpace>
+      </Text>
+      <TBarcode FullName="Amica.Vdp.Common.TBarcodeBase">
+        <BarcodeTypeShell>Code128</BarcodeTypeShell>
+        <BarcodeType>Code128</BarcodeType>
+        <ModuleWidth>0.007480315</ModuleWidth>
+        <FixedModuleWidth>true</FixedModuleWidth>
+        <WHWithScale>false</WHWithScale>
+        <PrintRatio></PrintRatio>
+        <TextDistance>0</TextDistance>
+        <BarWidthReduction>0</BarWidthReduction>
+        <BarWidthReductionUnit>Percent</BarWidthReductionUnit>
+        <IsShowText>true</IsShowText>
+        <IsTextAbove>false</IsTextAbove>
+        <IsCustDrawText>true</IsCustDrawText>
+        <IsTextFormat>false</IsTextFormat>
+        <CustAlignment>Center</CustAlignment>
+        <CheckdigitMethod>Standard</CheckdigitMethod>
+        <EncodingMode>CodePage</EncodingMode>
+        <CodePage>Default</CodePage>
+        <TranslateEscapeSequences>false</TranslateEscapeSequences>
+        <OnlyFixedModuleWidth>false</OnlyFixedModuleWidth>
+        <BarSize Width="1.989764" Height="0.511811"></BarSize>
+        <CodeFont>
+          <Name>Microsoft Sans Serif</Name>
+          <Size>9</Size>
+          <Style>Regular</Style>
+        </CodeFont>
+        <TextFormat FullName="Amica.Vdp.Common.TextFormat">
+          <MaskFormat></MaskFormat>
+          <Padding xml:space="preserve">*</Padding>
+          <PaddingLeading>true</PaddingLeading>
+        </TextFormat>
+        <Format></Format>
+        <FormatFlag>false</FormatFlag>
+        <UseRainbow>false</UseRainbow>
+      </TBarcode>
+      <Line>
+        <LineColor C="0" M="0" Y="0" K="100"></LineColor>
+        <LineWidth>0.25</LineWidth>
+        <LineStyle>Solid</LineStyle>
+      </Line>
+      <ZOrder>10</ZOrder>
+      <Alias>15</Alias>
+      <RotateAngle>90</RotateAngle>
+      <Visible>true</Visible>
+      <IsAutoSize>true</IsAutoSize>
+      <IsAutoWrap>false</IsAutoWrap>
+      <IsAutoScale>false</IsAutoScale>
+      <IsTransparent>false</IsTransparent>
+      <IsKeyElement>false</IsKeyElement>
+      <IsValueElement>false</IsValueElement>
+      <IsFilled>true</IsFilled>
+      <Overprint>false</Overprint>
+      <InPage>false</InPage>
+      <Density>100</Density>
+      <RecordOrder>0</RecordOrder>
+    </StaticText>
+    <StaticText FullName="Amica.Vdp.Common.Element.VdpStaticText">
+      <DisplayType>Text</DisplayType>
+      <Mirror>None</Mirror>
+      <Rect X="0.2106504" Y="3.296459" Width="1.181103" Height="0.1393332"></Rect>
+      <IsDisplayBorder>false</IsDisplayBorder>
+      <IsReverseColor>false</IsReverseColor>
+      <Text>
+        <Content><![CDATA[30312E323032382D312D31342D3330]]></Content>
+        <ForeColor A="255" R="0" G="0" B="0"></ForeColor>
+        <TextFont>
+          <Name>Microsoft Sans Serif</Name>
+          <Size>8</Size>
+          <Style>Regular</Style>
+        </TextFont>
+        <Alignment_H>Left</Alignment_H>
+        <Alignment_V>Top</Alignment_V>
+        <FontScale>1</FontScale>
+        <IsConvertNumberToWord>false</IsConvertNumberToWord>
+        <GapSpaceNum>0</GapSpaceNum>
+        <CharacterInterval>0</CharacterInterval>
+        <LineSpace>0</LineSpace>
+      </Text>
+      <Line>
+        <LineColor C="0" M="0" Y="0" K="100"></LineColor>
+        <LineWidth>0.25</LineWidth>
+        <LineStyle>Solid</LineStyle>
+      </Line>
+      <ZOrder>11</ZOrder>
+      <Alias>12</Alias>
+      <RotateAngle>90</RotateAngle>
+      <Visible>true</Visible>
+      <IsAutoSize>false</IsAutoSize>
+      <IsAutoWrap>false</IsAutoWrap>
+      <IsAutoScale>false</IsAutoScale>
+      <IsTransparent>true</IsTransparent>
+      <IsKeyElement>false</IsKeyElement>
+      <IsValueElement>false</IsValueElement>
+      <IsFilled>true</IsFilled>
+      <Overprint>false</Overprint>
+      <InPage>false</InPage>
+      <Density>100</Density>
+      <RecordOrder>0</RecordOrder>
+    </StaticText>
+    <StaticText FullName="Amica.Vdp.Common.Element.VdpStaticText">
+      <DisplayType>Text</DisplayType>
+      <Mirror>None</Mirror>
+      <Rect X="0.590364" Y="2.480501" Width="0.4216667" Height="0.1063333"></Rect>
+      <IsDisplayBorder>false</IsDisplayBorder>
+      <IsReverseColor>false</IsReverseColor>
+      <Text>
+        <Content><![CDATA[E2849620D0BFD0B0D180D182D0B8D0B8203A]]></Content>
+        <ForeColor A="255" R="0" G="0" B="0"></ForeColor>
+        <TextFont>
+          <Name>Microsoft Sans Serif</Name>
+          <Size>6</Size>
+          <Style>Regular</Style>
+        </TextFont>
+        <Alignment_H>Left</Alignment_H>
+        <Alignment_V>Top</Alignment_V>
+        <FontScale>1</FontScale>
+        <IsConvertNumberToWord>false</IsConvertNumberToWord>
+        <GapSpaceNum>0</GapSpaceNum>
+        <CharacterInterval>0</CharacterInterval>
+        <LineSpace>0</LineSpace>
+      </Text>
+      <Line>
+        <LineColor C="0" M="0" Y="0" K="100"></LineColor>
+        <LineWidth>0.25</LineWidth>
+        <LineStyle>Solid</LineStyle>
+      </Line>
+      <ZOrder>12</ZOrder>
+      <Alias>17</Alias>
+      <RotateAngle>90</RotateAngle>
+      <Visible>true</Visible>
+      <IsAutoSize>true</IsAutoSize>
+      <IsAutoWrap>false</IsAutoWrap>
+      <IsAutoScale>false</IsAutoScale>
+      <IsTransparent>true</IsTransparent>
+      <IsKeyElement>false</IsKeyElement>
+      <IsValueElement>false</IsValueElement>
+      <IsFilled>true</IsFilled>
+      <Overprint>false</Overprint>
+      <InPage>false</InPage>
+      <Density>100</Density>
+      <RecordOrder>0</RecordOrder>
+    </StaticText>
+    <StaticText FullName="Amica.Vdp.Common.Element.VdpStaticText">
+      <DisplayType>Text</DisplayType>
+      <Mirror>None</Mirror>
+      <Rect X="0.5307821" Y="0.8077988" Width="0.225" Height="0.1448333"></Rect>
+      <IsDisplayBorder>false</IsDisplayBorder>
+      <IsReverseColor>false</IsReverseColor>
+      <Text>
+        <Content><![CDATA[D090D180D1822E]]></Content>
+        <ForeColor A="255" R="0" G="0" B="0"></ForeColor>
+        <TextFont>
+          <Name>Microsoft Sans Serif</Name>
+          <Size>8.25</Size>
+          <Style>Regular</Style>
+        </TextFont>
+        <Alignment_H>Left</Alignment_H>
+        <Alignment_V>Top</Alignment_V>
+        <FontScale>1</FontScale>
+        <IsConvertNumberToWord>false</IsConvertNumberToWord>
+        <GapSpaceNum>0</GapSpaceNum>
+        <CharacterInterval>0</CharacterInterval>
+        <LineSpace>0</LineSpace>
+      </Text>
+      <Line>
+        <LineColor C="0" M="0" Y="0" K="100"></LineColor>
+        <LineWidth>0.25</LineWidth>
+        <LineStyle>Solid</LineStyle>
+      </Line>
+      <ZOrder>13</ZOrder>
+      <Alias>21</Alias>
+      <RotateAngle>90</RotateAngle>
+      <Visible>true</Visible>
+      <IsAutoSize>true</IsAutoSize>
+      <IsAutoWrap>false</IsAutoWrap>
+      <IsAutoScale>false</IsAutoScale>
+      <IsTransparent>true</IsTransparent>
+      <IsKeyElement>false</IsKeyElement>
+      <IsValueElement>false</IsValueElement>
+      <IsFilled>true</IsFilled>
+      <Overprint>false</Overprint>
+      <InPage>false</InPage>
+      <Density>100</Density>
+      <RecordOrder>0</RecordOrder>
+    </StaticText>
+    <StaticText FullName="Amica.Vdp.Common.Element.VdpStaticText">
+      <DisplayType>Text</DisplayType>
+      <Mirror>None</Mirror>
+      <Rect X="-0.06494379" Y="2.958644" Width="1.377953" Height="0.1063335"></Rect>
+      <IsDisplayBorder>false</IsDisplayBorder>
+      <IsReverseColor>false</IsReverseColor>
+      <Text>
+        <Content><![CDATA[D094D0B0D182D0B020D0BFD180D0BED0B8D0B7D0B2D0BED0B4D181D182D0B2D0B0203A2030312E30312E32303236]]></Content>
+        <ForeColor A="255" R="0" G="0" B="0"></ForeColor>
+        <TextFont>
+          <Name>Microsoft Sans Serif</Name>
+          <Size>6</Size>
+          <Style>Regular</Style>
+        </TextFont>
+        <Alignment_H>Left</Alignment_H>
+        <Alignment_V>Top</Alignment_V>
+        <FontScale>1</FontScale>
+        <IsConvertNumberToWord>false</IsConvertNumberToWord>
+        <GapSpaceNum>0</GapSpaceNum>
+        <CharacterInterval>0</CharacterInterval>
+        <LineSpace>0</LineSpace>
+      </Text>
+      <Line>
+        <LineColor C="0" M="0" Y="0" K="100"></LineColor>
+        <LineWidth>0.25</LineWidth>
+        <LineStyle>Solid</LineStyle>
+      </Line>
+      <ZOrder>14</ZOrder>
+      <Alias>12</Alias>
+      <RotateAngle>90</RotateAngle>
+      <Visible>true</Visible>
+      <IsAutoSize>false</IsAutoSize>
+      <IsAutoWrap>false</IsAutoWrap>
+      <IsAutoScale>false</IsAutoScale>
+      <IsTransparent>true</IsTransparent>
+      <IsKeyElement>false</IsKeyElement>
+      <IsValueElement>false</IsValueElement>
+      <IsFilled>true</IsFilled>
+      <Overprint>false</Overprint>
+      <InPage>false</InPage>
+      <Density>100</Density>
+      <RecordOrder>0</RecordOrder>
+    </StaticText>
+    <StaticText FullName="Amica.Vdp.Common.Element.VdpStaticText">
+      <DisplayType>Text</DisplayType>
+      <Mirror>None</Mirror>
+      <Rect X="0.4537187" Y="0.3149598" Width="0.7480314" Height="0.1181103"></Rect>
+      <IsDisplayBorder>false</IsDisplayBorder>
+      <IsReverseColor>false</IsReverseColor>
+      <Text>
+        <Content><![CDATA[535343436964]]></Content>
+        <ForeColor A="255" R="0" G="0" B="0"></ForeColor>
+        <TextFont>
+          <Name>Roman</Name>
+          <Size>6</Size>
+          <Style>Regular</Style>
+        </TextFont>
+        <Alignment_H>Left</Alignment_H>
+        <Alignment_V>Top</Alignment_V>
+        <FontScale>1</FontScale>
+        <IsConvertNumberToWord>false</IsConvertNumberToWord>
+        <GapSpaceNum>0</GapSpaceNum>
+        <CharacterInterval>0</CharacterInterval>
+        <LineSpace>0</LineSpace>
+      </Text>
+      <Line>
+        <LineColor C="0" M="0" Y="0" K="100"></LineColor>
+        <LineWidth>0.25</LineWidth>
+        <LineStyle>Solid</LineStyle>
+      </Line>
+      <ZOrder>21</ZOrder>
+      <Alias>12</Alias>
+      <RotateAngle>90</RotateAngle>
+      <Visible>true</Visible>
+      <IsAutoSize>false</IsAutoSize>
+      <IsAutoWrap>false</IsAutoWrap>
+      <IsAutoScale>false</IsAutoScale>
+      <IsTransparent>true</IsTransparent>
+      <IsKeyElement>false</IsKeyElement>
+      <IsValueElement>false</IsValueElement>
+      <IsFilled>true</IsFilled>
+      <Overprint>false</Overprint>
+      <InPage>false</InPage>
+      <Density>100</Density>
+      <RecordOrder>0</RecordOrder>
+    </StaticText>
+    <VariableText FullName="Amica.Vdp.Common.Element.VdpVariableText">
+      <DisplayType>Barcode</DisplayType>
+      <Mirror>None</Mirror>
+      <DoVerification>false</DoVerification>
+      <Rect X="0" Y="0" Width="0.7480315" Height="0.7480315"></Rect>
+      <IsDisplayBorder>false</IsDisplayBorder>
+      <IsReverseColor>false</IsReverseColor>
+      <Text>
+        <Content><![CDATA[3030303436303730353137393030303433373138]]></Content>
+        <ForeColor A="255" R="0" G="0" B="0"></ForeColor>
+        <TextFont>
+          <Name>Microsoft Sans Serif</Name>
+          <Size>8.25</Size>
+          <Style>Regular</Style>
+        </TextFont>
+        <Alignment_H>Left</Alignment_H>
+        <Alignment_V>Top</Alignment_V>
+        <FontScale>1</FontScale>
+        <IsConvertNumberToWord>false</IsConvertNumberToWord>
+        <GapSpaceNum>0</GapSpaceNum>
+        <CharacterInterval>0</CharacterInterval>
+        <LineSpace>0</LineSpace>
+      </Text>
+      <TBarcode FullName="Amica.Vdp.Common.TDataMatrix">
+        <BarcodeTypeShell>DataMatrix</BarcodeTypeShell>
+        <BarcodeType>DataMatrix</BarcodeType>
+        <ModuleWidth>0.04675197</ModuleWidth>
+        <FixedModuleWidth>false</FixedModuleWidth>
+        <WHWithScale>true</WHWithScale>
+        <PrintRatio></PrintRatio>
+        <TextDistance>0</TextDistance>
+        <BarWidthReduction>0</BarWidthReduction>
+        <BarWidthReductionUnit>Percent</BarWidthReductionUnit>
+        <IsShowText>true</IsShowText>
+        <IsTextAbove>false</IsTextAbove>
+        <IsCustDrawText>false</IsCustDrawText>
+        <IsTextFormat>false</IsTextFormat>
+        <CustAlignment>Center</CustAlignment>
+        <CheckdigitMethod>Standard</CheckdigitMethod>
+        <EncodingMode>CodePage</EncodingMode>
+        <CodePage>Default</CodePage>
+        <TranslateEscapeSequences>false</TranslateEscapeSequences>
+        <OnlyFixedModuleWidth>false</OnlyFixedModuleWidth>
+        <BarSize Width="0.7480315" Height="0.7480315"></BarSize>
+        <CodeFont>
+          <Name>Microsoft Sans Serif</Name>
+          <Size>9</Size>
+          <Style>Regular</Style>
+        </CodeFont>
+        <TextFormat FullName="Amica.Vdp.Common.TextFormat">
+          <MaskFormat></MaskFormat>
+          <Padding xml:space="preserve">*</Padding>
+          <PaddingLeading>true</PaddingLeading>
+        </TextFormat>
+        <Format></Format>
+        <FormatFlag>false</FormatFlag>
+        <UseRainbow>false</UseRainbow>
+        <DataMatrix>
+          <IsRectangular>false</IsRectangular>
+          <IsEnforceBinEncoding>false</IsEnforceBinEncoding>
+          <IsStructuredAppend>false</IsStructuredAppend>
+          <AppendFileId>-1</AppendFileId>
+          <AppendIndex>-1</AppendIndex>
+          <AppendSum>-1</AppendSum>
+          <DMFormat>UccEanGs1</DMFormat>
+          <DMSize>Default</DMSize>
+        </DataMatrix>
+      </TBarcode>
+      <VarFieldManager FullName="Amica.Vdp.Common.Element.VarFieldManager">
+        <VarFields Elements="1">
+          <VarField FullName="Amica.Vdp.Common.Element.DataField">
+            <FieldType>FT_DataField</FieldType>
+            <FullName>&lt;&lt;C1&gt;&gt;</FullName>
+            <FieldName>C1</FieldName>
+            <FieldIndex>0</FieldIndex>
+            <StartPos>0</StartPos>
+            <StopPos>0</StopPos>
+            <Length>6</Length>
+            <ApplyMask>false</ApplyMask>
+          </VarField>
+        </VarFields>
+      </VarFieldManager>
+      <TextTemplate>3C3C43313E3E</TextTemplate>
+      <OneCellPerField>false</OneCellPerField>
+      <IgnoreEmptyFieldLine>false</IgnoreEmptyFieldLine>
+      <Line>
+        <LineColor C="0" M="0" Y="0" K="100"></LineColor>
+        <LineWidth>0.25</LineWidth>
+        <LineStyle>Solid</LineStyle>
+      </Line>
+      <ZOrder>1</ZOrder>
+      <Alias>11</Alias>
+      <RotateAngle>0</RotateAngle>
+      <Visible>true</Visible>
+      <IsAutoSize>true</IsAutoSize>
+      <IsAutoWrap>false</IsAutoWrap>
+      <IsAutoScale>false</IsAutoScale>
+      <IsTransparent>true</IsTransparent>
+      <IsKeyElement>false</IsKeyElement>
+      <IsValueElement>false</IsValueElement>
+      <IsFilled>true</IsFilled>
+      <Overprint>false</Overprint>
+      <InPage>false</InPage>
+      <Density>100</Density>
+      <RecordOrder>0</RecordOrder>
+    </VariableText>
+    <VariableImage_Church FullName="Amica.Vdp.Common.Element.VdpVariableImage_Church">
+      <DisplayType>Text</DisplayType>
+      <Mirror>None</Mirror>
+      <Rect X="0.6889763" Y="3.503937" Width="0.7086613" Height="0.2362206"></Rect>
+      <IsDisplayBorder>false</IsDisplayBorder>
+      <IsReverseColor>false</IsReverseColor>
+      <Text>
+        <Content><![CDATA[]]></Content>
+        <ForeColor A="255" R="0" G="0" B="0"></ForeColor>
+        <TextFont>
+          <Name>Microsoft Sans Serif</Name>
+          <Size>8.25</Size>
+          <Style>Regular</Style>
+        </TextFont>
+        <Alignment_H>Left</Alignment_H>
+        <Alignment_V>Top</Alignment_V>
+        <FontScale>1</FontScale>
+        <IsConvertNumberToWord>false</IsConvertNumberToWord>
+        <GapSpaceNum>0</GapSpaceNum>
+        <CharacterInterval>0</CharacterInterval>
+        <LineSpace>0</LineSpace>
+      </Text>
+      <Image>
+        <RipImage>false</RipImage>
+        <IsFixed>true</IsFixed>
+        <HotFolder></HotFolder>
+        <OutFolder></OutFolder>
+        <FixedImagePath>C:\tmp\Product_PackIcons2.png</FixedImagePath>
+        <BindField></BindField>
+        <ImageFolder></ImageFolder>
+        <Alignment>TopRight</Alignment>
+        <Halftone>true</Halftone>
+        <Stretch>SameRatio</Stretch>
+      </Image>
+      <Line>
+        <LineColor C="0" M="0" Y="0" K="100"></LineColor>
+        <LineWidth>0.25</LineWidth>
+        <LineStyle>Solid</LineStyle>
+      </Line>
+      <ZOrder>7</ZOrder>
+      <Alias>16</Alias>
+      <RotateAngle>90</RotateAngle>
+      <Visible>true</Visible>
+      <IsAutoSize>false</IsAutoSize>
+      <IsAutoWrap>false</IsAutoWrap>
+      <IsAutoScale>false</IsAutoScale>
+      <IsTransparent>true</IsTransparent>
+      <IsKeyElement>false</IsKeyElement>
+      <IsValueElement>false</IsValueElement>
+      <IsFilled>true</IsFilled>
+      <Overprint>false</Overprint>
+      <InPage>false</InPage>
+      <Density>100</Density>
+      <RecordOrder>0</RecordOrder>
+    </VariableImage_Church>
+    <Page FullName="Amica.Vdp.Common.Element.VdpPage">
+      <Rect X="0" Y="0" Width="1.181102" Height="4"></Rect>
+      <Guid>f5696544-036a-4459-a3b0-2149b019e7d3</Guid>
+      <PageNum>1</PageNum>
+      <IsNotAllowRepeatPrint>false</IsNotAllowRepeatPrint>
+      <IsOutputBackground>true</IsOutputBackground>
+      <BackgroundImage></BackgroundImage>
+      <BKAlignment>MiddleCenter</BKAlignment>
+      <DesignUnit>mm</DesignUnit>
+      <Stretch>None</Stretch>
+      <TextMode>TRM_GdiPro</TextMode>
+      <RipParam FullName="Amica.Vdp.PageOutput.RipParam">
+        <OutPutPath></OutPutPath>
+        <DataSourcePath></DataSourcePath>
+        <Resolution Width="600" Height="300"></Resolution>
+        <IsOneRecordPerPanel>true</IsOneRecordPerPanel>
+        <IsBarcodeOptimization>false</IsBarcodeOptimization>
+        <IsReverse>false</IsReverse>
+        <IsProofing>false</IsProofing>
+        <IsOutputHeadPages>true</IsOutputHeadPages>
+        <IsOutputBackImage>true</IsOutputBackImage>
+        <BeginNo>1</BeginNo>
+        <EndNo>1</EndNo>
+        <BeginBookNo>1</BeginBookNo>
+        <EndBookNo>1</EndBookNo>
+        <ColorDepth>1</ColorDepth>
+        <PageRotateAngle>0</PageRotateAngle>
+        <DensityType>Middle</DensityType>
+        <OutputFileType>TIFF</OutputFileType>
+        <PageAdjust>None</PageAdjust>
+        <AllPages>true</AllPages>
+        <IsProofingA4>true</IsProofingA4>
+        <OutColorModes Elements="1">
+          <ColorMode>K</ColorMode>
+        </OutColorModes>
+        <OutputRecords>0-3</OutputRecords>
+        <ChannelVariableDots>
+          <VariableDot FullName="Amica.Vdp.Common.ChannelVariableDot">
+            <ChannelName>K</ChannelName>
+            <Items>
+              <Item input="0.33" output="1"></Item>
+              <Item input="0.66" output="1"></Item>
+              <Item input="1" output="1"></Item>
+            </Items>
+          </VariableDot>
+          <VariableDot FullName="Amica.Vdp.Common.ChannelVariableDot">
+            <ChannelName>C</ChannelName>
+            <Items>
+              <Item input="0.33" output="1"></Item>
+              <Item input="0.66" output="1"></Item>
+              <Item input="1" output="1"></Item>
+            </Items>
+          </VariableDot>
+          <VariableDot FullName="Amica.Vdp.Common.ChannelVariableDot">
+            <ChannelName>M</ChannelName>
+            <Items>
+              <Item input="0.33" output="1"></Item>
+              <Item input="0.66" output="1"></Item>
+              <Item input="1" output="1"></Item>
+            </Items>
+          </VariableDot>
+          <VariableDot FullName="Amica.Vdp.Common.ChannelVariableDot">
+            <ChannelName>Y</ChannelName>
+            <Items>
+              <Item input="0.33" output="1"></Item>
+              <Item input="0.66" output="1"></Item>
+              <Item input="1" output="1"></Item>
+            </Items>
+          </VariableDot>
+        </ChannelVariableDots>
+        <AdditionInfo>
+        </AdditionInfo>
+      </RipParam>
+      <DataSourceSet DataCount="1">
+        <DataSource>
+          <DataPathInfo FullName="Amica.Vdp.Common.DataSource.CsvAdapter">
+            <SourceType>CSV</SourceType>
+            <SettingStr xml:space="preserve">#</SettingStr>
+            <SourcePath>C:\tmp\SSCC_2026-02-16_fullDM.csv</SourcePath>
+          </DataPathInfo>
+          <KeyField></KeyField>
+          <DataMd5>24F34FEAD7B8075CCA67E9A9EB83ACDD</DataMd5>
+        </DataSource>
+      </DataSourceSet>
+      <Template FullName="Amica.Vdp.PageTemplate.VdpPageTemplate">
+        <UniqueId>88781f39-2954-445f-9c48-c296c22dee1e</UniqueId>
+        <PanelNum HorNum="1" VerNum="1"></PanelNum>
+        <PageSize Width="1.181102" Height="6"></PageSize>
+        <PageMargin X="0" Y="0"></PageMargin>
+        <PanelSize Width="1.181102" Height="4"></PanelSize>
+        <PanelSpace Width="0" Height="0"></PanelSpace>
+        <IsOneRecordPerPanel>false</IsOneRecordPerPanel>
+        <PanelCount>1</PanelCount>
+        <PaperStockId>SSCC_100mm</PaperStockId>
+        <PaperDescription></PaperDescription>
+        <PanelOrder>LeftToRight</PanelOrder>
+        <ConveyorDirection>RightToLeft</ConveyorDirection>
+      </Template>
+      <ConsumeRecordsPerPanel>1</ConsumeRecordsPerPanel>
+    </Page>
+  </VDPPage>
+</File>
