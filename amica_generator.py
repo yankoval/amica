@@ -26,6 +26,14 @@ def calculate_md5(file_path):
             hash_md5.update(chunk)
     return hash_md5.hexdigest().upper()
 
+def count_csv_rows(file_path):
+    """Counts number of lines in the CSV/data file."""
+    if not os.path.exists(file_path):
+        raise FileNotFoundError(f"Data file not found: {file_path}")
+    with open(file_path, 'r', encoding='utf-8') as f:
+        # We assume one record per line as per the user's logic
+        return sum(1 for line in f if line.strip())
+
 def string_to_hex(text):
     """Encodes string to Hex format (UTF-8) for Amica."""
     return text.encode('utf-8').hex().upper()
@@ -89,8 +97,9 @@ def apply_transformations(value, transformations):
 def generate_amica_vdf(base_template_path, new_csv_path, static_json_path, mapping_json_path, output_vdf_path):
     """Main function to generate VDF by substituting static and dynamic data."""
 
-    # 1. Calculate MD5 of the new CSV file
+    # 1. Calculate MD5 and row count of the new CSV file
     new_md5 = calculate_md5(new_csv_path)
+    record_count = count_csv_rows(new_csv_path)
 
     # 2. Load data
     with open(static_json_path, 'r', encoding='utf-8') as f:
@@ -114,6 +123,19 @@ def generate_amica_vdf(base_template_path, new_csv_path, static_json_path, mappi
         md5_node = data_source.find(".//DataMd5")
         if md5_node is not None:
             md5_node.text = new_md5
+
+    # 4.1 Update RipParam (Print parameters)
+    rip_param = root.find(".//RipParam")
+    if rip_param is not None:
+        # Set total record count
+        end_no = rip_param.find("EndNo")
+        if end_no is not None:
+            end_no.text = str(record_count)
+
+        # Set range (e.g., "0-99" for 100 records)
+        out_records = rip_param.find("OutputRecords")
+        if out_records is not None:
+            out_records.text = f"0-{max(0, record_count - 1)}"
 
     # 5. Update static part (Text blocks)
     for content_node in root.findall(".//Content"):
