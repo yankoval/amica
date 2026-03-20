@@ -81,7 +81,21 @@ def generate_amica_vdf(base_template_path, new_csv_path, static_json_path, mappi
                 continue
 
             modified = False
-            # Check each rule from mapping
+
+            # 1. Check for {Key} patterns
+            patterns = re.findall(r'\{(.*?)\}', decoded_text)
+            for key in patterns:
+                if key not in mapping_dict:
+                    raise KeyError(f"Key '{key}' found in template pattern but missing in mapping.json")
+
+                new_val = find_in_json(static_data, key)
+                if new_val is None:
+                    raise KeyError(f"Key '{key}' found in template pattern but missing in static JSON data")
+
+                decoded_text = decoded_text.replace(f"{{{key}}}", str(new_val))
+                modified = True
+
+            # 2. Check each rule from mapping (traditional placeholders)
             for json_key, text_in_template in mapping_dict.items():
                 if text_in_template in decoded_text:
                     new_val = find_in_json(static_data, json_key)
