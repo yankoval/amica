@@ -94,7 +94,7 @@ def apply_transformations(value, transformations):
             raise
     return current_value
 
-def generate_amica_vdf(base_template_path, new_csv_path, static_json_path, mapping_json_path, output_vdf_path):
+def generate_amica_vdf(base_template_path, new_csv_path, static_json_path, mapping_json_path, output_vdf_path, filename_mask="{OriginalFileName}"):
     """Main function to generate VDF by substituting static and dynamic data."""
 
     # 1. Calculate MD5 and row count of the new CSV file
@@ -107,6 +107,34 @@ def generate_amica_vdf(base_template_path, new_csv_path, static_json_path, mappi
 
     with open(mapping_json_path, 'r', encoding='utf-8') as f:
         mapping_dict = json.load(f)
+
+    # 2.1 Pre-calculate transformed values for masking and mapping
+    transformed_values = {}
+    for json_key, mapping_info in mapping_dict.items():
+        if isinstance(mapping_info, dict):
+            transformations = mapping_info.get("transform", [])
+        else:
+            transformations = []
+
+        val = find_in_json(static_data, json_key)
+        if val is None:
+            error_msg = f"Key '{json_key}' not found in static JSON data"
+            logger.error(error_msg)
+            raise KeyError(error_msg)
+
+        if transformations:
+            val = apply_transformations(val, transformations)
+
+        transformed_values[json_key] = str(val)
+
+    # 2.2 Resolve output filename
+    original_filename = os.path.basename(output_vdf_path)
+    resolved_filename = filename_mask.replace("{OriginalFileName}", original_filename)
+    for key, val in transformed_values.items():
+        resolved_filename = resolved_filename.replace(f"{{{key}}}", val)
+
+    output_dir = os.path.dirname(output_vdf_path)
+    final_output_path = os.path.join(output_dir, resolved_filename)
 
     # 3. Parse VDF template (XML)
     tree = ET.parse(base_template_path)
@@ -149,22 +177,12 @@ def generate_amica_vdf(base_template_path, new_csv_path, static_json_path, mappi
             for json_key, mapping_info in mapping_dict.items():
                 if isinstance(mapping_info, dict):
                     text_in_template = mapping_info.get("placeholder")
-                    transformations = mapping_info.get("transform", [])
                 else:
                     text_in_template = mapping_info
-                    transformations = []
 
                 if text_in_template and text_in_template in decoded_text:
-                    new_val = find_in_json(static_data, json_key)
-                    if new_val is None:
-                        error_msg = f"Key '{json_key}' not found in static JSON data"
-                        logger.error(error_msg)
-                        raise KeyError(error_msg)
-
-                    if transformations:
-                        new_val = apply_transformations(new_val, transformations)
-
-                    decoded_text = decoded_text.replace(text_in_template, str(new_val))
+                    new_val = transformed_values[json_key]
+                    decoded_text = decoded_text.replace(text_in_template, new_val)
                     modified = True
 
             if modified:
@@ -172,11 +190,11 @@ def generate_amica_vdf(base_template_path, new_csv_path, static_json_path, mappi
 
     # 6. Save the result
     # short_empty_elements=False ensures <Content></Content> instead of <Content />
-    with open(output_vdf_path, 'wb') as f:
+    with open(final_output_path, 'wb') as f:
         tree.write(f, encoding="utf-8", xml_declaration=True, short_empty_elements=False)
 
     # 7. Final touch: wrap Hex text (or empty) in CDATA
-    with open(output_vdf_path, "r", encoding="utf-8") as f:
+    with open(final_output_path, "r", encoding="utf-8") as f:
         xml_str = f.read()
 
     # Replace content of <Content>...</Content> with CDATA
@@ -185,11 +203,11 @@ def generate_amica_vdf(base_template_path, new_csv_path, static_json_path, mappi
     # Handle self-closing tags just in case
     xml_str = xml_str.replace('<Content />', '<Content><![CDATA[]]></Content>')
 
-    with open(output_vdf_path, "w", encoding="utf-8") as f:
+    with open(final_output_path, "w", encoding="utf-8") as f:
         f.write(xml_str)
 
     logger.info(f"---")
-    logger.info(f"[*] File successfully created: {os.path.basename(output_vdf_path)}")
+    logger.info(f"[*] File successfully created: {os.path.basename(final_output_path)}")
     logger.info(f"[*] Used CSV: {os.path.basename(new_csv_path)}")
     logger.info(f"[*] MD5: {new_md5}")
 
@@ -200,6 +218,7 @@ if __name__ == "__main__":
     parser.add_argument("--json", required=True, help="Path to static JSON data")
     parser.add_argument("--mapping", default="mapping.json", help="Path to mapping JSON file")
     parser.add_argument("--output", required=True, help="Path for the output VDF file")
+    parser.add_argument("--filename-mask", default="{OriginalFileName}", help="Mask for output filename (e.g. '{Product_gtin}_{OriginalFileName}')")
 
     args = parser.parse_args()
 
@@ -209,7 +228,8 @@ if __name__ == "__main__":
             new_csv_path=args.csv,
             static_json_path=args.json,
             mapping_json_path=args.mapping,
-            output_vdf_path=args.output
+            output_vdf_path=args.output,
+            filename_mask=args.filename_mask
         )
     except Exception as e:
         logger.exception(f"[!] Error: {e}")

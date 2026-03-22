@@ -87,3 +87,20 @@ def test_backward_compatibility(tmp_path):
         contents.append(hex_to_string(content.text))
 
     assert "ABC-123" in contents
+
+def test_filename_mask(tmp_path):
+    template = "tests/data/test_template.vdf"
+    csv_data = "tests/data/test_dummy.csv"
+    static_json = "tests/data/test_data.json"
+    mapping = "tests/data/test_mapping.json"
+    output = tmp_path / "original.vdf"
+
+    mask = "{article}_{OriginalFileName}"
+    # article in test_data.json is "ABC-123", transform regex "^[A-Z]+-" -> "123"
+
+    generate_amica_vdf(template, csv_data, static_json, mapping, str(output), filename_mask=mask)
+
+    expected_path = tmp_path / "123_original.vdf"
+    assert os.path.exists(expected_path)
+    # Original output path should NOT exist because it was renamed/saved as mask
+    assert not os.path.exists(output)
