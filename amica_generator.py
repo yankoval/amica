@@ -119,19 +119,23 @@ def generate_amica_vdf(base_template_path, new_csv_path, static_json_path, mappi
     # 2.1 Pre-calculate transformed values for masking and mapping
     transformed_values = {}
     for json_key, mapping_info in mapping_dict.items():
-        if isinstance(mapping_info, dict):
-            transformations = mapping_info.get("transform", [])
+        if isinstance(mapping_info, dict) and "setValue" in mapping_info:
+            # If setValue is provided, use it directly (skip lookup and transforms)
+            val = mapping_info["setValue"]
         else:
-            transformations = []
+            if isinstance(mapping_info, dict):
+                transformations = mapping_info.get("transform", [])
+            else:
+                transformations = []
 
-        val = find_in_json(static_data, json_key)
-        if val is None:
-            error_msg = f"Key '{json_key}' not found in static JSON data"
-            logger.error(error_msg)
-            raise KeyError(error_msg)
+            val = find_in_json(static_data, json_key)
+            if val is None:
+                error_msg = f"Key '{json_key}' not found in static JSON data"
+                logger.error(error_msg)
+                raise KeyError(error_msg)
 
-        if transformations:
-            val = apply_transformations(val, transformations)
+            if transformations:
+                val = apply_transformations(val, transformations)
 
         transformed_values[json_key] = str(val)
 
