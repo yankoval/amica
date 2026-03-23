@@ -61,8 +61,8 @@ def test_rip_param_update(tmp_path):
     output_records = rip_param.find("OutputRecords").text
     assert output_records == "0-2"
 
-def test_self_closing_tags(tmp_path):
-    # Create a dummy template with an empty tag
+def test_cdata_wrapping_of_empty_content(tmp_path):
+    # Create a dummy template with an empty Content tag
     template_path = tmp_path / "template.vdf"
     template_path.write_text("""<?xml version="1.0" encoding="utf-8"?>
 <File Format="Amica.VDF">
@@ -70,7 +70,7 @@ def test_self_closing_tags(tmp_path):
     <Page>
       <RipParam><EndNo>1</EndNo><OutputRecords>0-0</OutputRecords></RipParam>
       <DataSourceSet><DataSource><DataPathInfo><SourcePath>old.csv</SourcePath></DataPathInfo><DataMd5>OLDMD5</DataMd5></DataSource></DataSourceSet>
-      <EmptyTag></EmptyTag>
+      <Content></Content>
     </Page>
   </VDPPage>
 </File>
@@ -97,5 +97,5 @@ def test_self_closing_tags(tmp_path):
 
     with open(output_path, "r", encoding="utf-8") as f:
         content = f.read()
-        # Verify self-closing tag
-        assert "<EmptyTag />" in content or "<EmptyTag/>" in content
+        # Verify CDATA wrapping even for empty Content
+        assert "<Content><![CDATA[]]></Content>" in content

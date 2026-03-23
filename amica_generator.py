@@ -197,9 +197,10 @@ def generate_amica_vdf(base_template_path, new_csv_path, static_json_path, mappi
                 content_node.text = string_to_hex(decoded_text)
 
     # 6. Save the result
-    # short_empty_elements=True ensures self-closing tags like <LineColor />
+    # short_empty_elements=False ensures <Content></Content> instead of <Content />
+    # This is important for the subsequent regex replacement of Content tags.
     with open(final_output_path, 'wb') as f:
-        tree.write(f, encoding="utf-8", xml_declaration=True, short_empty_elements=True)
+        tree.write(f, encoding="utf-8", xml_declaration=True, short_empty_elements=False)
 
     # 7. Final touch: wrap Hex text (or empty) in CDATA
     with open(final_output_path, "r", encoding="utf-8") as f:
@@ -207,9 +208,6 @@ def generate_amica_vdf(base_template_path, new_csv_path, static_json_path, mappi
 
     # Replace content of <Content>...</Content> with CDATA
     xml_str = re.sub(r'<Content[^>]*>(.*?)</Content>', r'<Content><![CDATA[\1]]></Content>', xml_str)
-
-    # Handle self-closing tags just in case
-    xml_str = xml_str.replace('<Content />', '<Content><![CDATA[]]></Content>')
 
     with open(final_output_path, "w", encoding="utf-8") as f:
         f.write(xml_str)
