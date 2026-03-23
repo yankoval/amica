@@ -185,7 +185,15 @@ def generate_amica_vdf(base_template_path, new_csv_path, static_json_path, mappi
                 continue
 
             modified = False
-            # Check each rule from mapping
+
+            # Replace braced patterns like {key} with transformed values
+            for key, val in transformed_values.items():
+                braced_key = f"{{{key}}}"
+                if braced_key in decoded_text:
+                    decoded_text = decoded_text.replace(braced_key, val)
+                    modified = True
+
+            # Check each rule from mapping (traditional placeholders)
             for json_key, mapping_info in mapping_dict.items():
                 if isinstance(mapping_info, dict):
                     text_in_template = mapping_info.get("placeholder")
