@@ -132,13 +132,18 @@ def generate_amica_vdf(base_template_path, new_csv_path, static_json_path, mappi
 
                 mapping_info = mapping_dict[key]
                 if isinstance(mapping_info, dict):
+                    lookup_key = mapping_info.get("placeholder")
                     transformations = mapping_info.get("transform", [])
                 else:
+                    lookup_key = mapping_info
                     transformations = []
 
-                new_val = find_in_json(static_data, key)
+                if not lookup_key:
+                    raise ValueError(f"No placeholder/lookup key defined for mapping key '{key}'")
+
+                new_val = find_in_json(static_data, lookup_key)
                 if new_val is None:
-                    raise KeyError(f"Key '{key}' found in template pattern but missing in static JSON data")
+                    raise KeyError(f"Key '{lookup_key}' (resolved from '{key}') missing in static JSON data")
 
                 if transformations:
                     new_val = apply_transformations(new_val, transformations)
@@ -147,18 +152,20 @@ def generate_amica_vdf(base_template_path, new_csv_path, static_json_path, mappi
                 modified = True
 
             # 2. Check each rule from mapping (traditional placeholders)
-            for json_key, mapping_info in mapping_dict.items():
+            for mapping_key, mapping_info in mapping_dict.items():
                 if isinstance(mapping_info, dict):
                     text_in_template = mapping_info.get("placeholder")
+                    lookup_key = mapping_info.get("placeholder") # Use same as placeholder for lookup
                     transformations = mapping_info.get("transform", [])
                 else:
                     text_in_template = mapping_info
+                    lookup_key = mapping_info
                     transformations = []
 
                 if text_in_template and text_in_template in decoded_text:
-                    new_val = find_in_json(static_data, json_key)
+                    new_val = find_in_json(static_data, lookup_key)
                     if new_val is None:
-                        error_msg = f"Key '{json_key}' not found in static JSON data"
+                        error_msg = f"Key '{lookup_key}' not found in static JSON data"
                         logger.error(error_msg)
                         raise KeyError(error_msg)
 
