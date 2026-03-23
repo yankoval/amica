@@ -28,14 +28,14 @@ def test_transformations(tmp_path):
     assert "03.2026" in contents
 
     # Check RipParam updates
-    # test_dummy.csv has 5 lines
+    # test_dummy.csv has 5 lines (1 header + 4 data)
     end_no = root.find(".//RipParam/EndNo")
     assert end_no is not None
-    assert end_no.text == "5"
+    assert end_no.text == "4"
 
     out_records = root.find(".//RipParam/OutputRecords")
     assert out_records is not None
-    assert out_records.text == "0-4"
+    assert out_records.text == "0-3"
 
 def test_missing_key(tmp_path):
     template = "tests/data/test_template.vdf"

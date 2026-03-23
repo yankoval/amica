@@ -27,12 +27,20 @@ def calculate_md5(file_path):
     return hash_md5.hexdigest().upper()
 
 def count_csv_rows(file_path):
-    """Counts number of lines in the CSV/data file."""
+    """Counts number of data records in the CSV/data file (excluding header)."""
     if not os.path.exists(file_path):
         raise FileNotFoundError(f"Data file not found: {file_path}")
     with open(file_path, 'r', encoding='utf-8') as f:
-        # We assume one record per line as per the user's logic
-        return sum(1 for line in f if line.strip())
+        # Count all non-empty lines
+        total_lines = sum(1 for line in f if line.strip())
+
+    # Subtract 1 for the header
+    record_count = total_lines - 1
+
+    if record_count <= 0:
+        raise ValueError(f"Data file {file_path} contains no records (only header or empty).")
+
+    return record_count
 
 def string_to_hex(text):
     """Encodes string to Hex format (UTF-8) for Amica."""
@@ -189,9 +197,9 @@ def generate_amica_vdf(base_template_path, new_csv_path, static_json_path, mappi
                 content_node.text = string_to_hex(decoded_text)
 
     # 6. Save the result
-    # short_empty_elements=False ensures <Content></Content> instead of <Content />
+    # short_empty_elements=True ensures self-closing tags like <LineColor />
     with open(final_output_path, 'wb') as f:
-        tree.write(f, encoding="utf-8", xml_declaration=True, short_empty_elements=False)
+        tree.write(f, encoding="utf-8", xml_declaration=True, short_empty_elements=True)
 
     # 7. Final touch: wrap Hex text (or empty) in CDATA
     with open(final_output_path, "r", encoding="utf-8") as f:
