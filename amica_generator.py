@@ -4,6 +4,17 @@ import os
 import json
 import re
 import argparse
+import logging
+from logging.handlers import RotatingFileHandler
+from datetime import datetime
+
+# Setup logging
+logger = logging.getLogger("amica_generator")
+logger.setLevel(logging.DEBUG)
+handler = RotatingFileHandler("amica_generator.log", maxBytes=1*1024*1024, backupCount=5)
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+handler.setFormatter(formatter)
+logger.addHandler(handler)
 
 def calculate_md5(file_path):
     """Calculates MD5 hash of a file for the DataSource section in VDF."""
@@ -43,6 +54,37 @@ def find_in_json(data, target_key):
             if res is not None:
                 return res
     return None
+
+def apply_transformations(value, transformations):
+    """Applies a list of transformations to a value."""
+    current_value = value
+    for trans in transformations:
+        trans_type = trans.get("type")
+        try:
+            if trans_type == "strptime":
+                fmt = trans.get("format")
+                if not fmt:
+                    raise ValueError("Missing 'format' for strptime transformation")
+                current_value = datetime.strptime(str(current_value), fmt)
+            elif trans_type == "strftime":
+                fmt = trans.get("format")
+                if not fmt:
+                    raise ValueError("Missing 'format' for strftime transformation")
+                if not isinstance(current_value, datetime):
+                    raise TypeError(f"strftime expected datetime object, got {type(current_value)}")
+                current_value = current_value.strftime(fmt)
+            elif trans_type == "regex":
+                pattern = trans.get("pattern")
+                replacement = trans.get("replacement")
+                if pattern is None or replacement is None:
+                    raise ValueError("Missing 'pattern' or 'replacement' for regex transformation")
+                current_value = re.sub(pattern, replacement, str(current_value))
+            else:
+                raise ValueError(f"Unknown transformation type: {trans_type}")
+        except Exception as e:
+            logger.error(f"Transformation failed: {trans}. Value: {current_value}. Error: {e}")
+            raise
+    return current_value
 
 def generate_amica_vdf(base_template_path, new_csv_path, static_json_path, mapping_json_path, output_vdf_path):
     """Main function to generate VDF by substituting static and dynamic data."""
@@ -88,20 +130,43 @@ def generate_amica_vdf(base_template_path, new_csv_path, static_json_path, mappi
                 if key not in mapping_dict:
                     raise KeyError(f"Key '{key}' found in template pattern but missing in mapping.json")
 
+                mapping_info = mapping_dict[key]
+                if isinstance(mapping_info, dict):
+                    transformations = mapping_info.get("transform", [])
+                else:
+                    transformations = []
+
                 new_val = find_in_json(static_data, key)
                 if new_val is None:
                     raise KeyError(f"Key '{key}' found in template pattern but missing in static JSON data")
+
+                if transformations:
+                    new_val = apply_transformations(new_val, transformations)
 
                 decoded_text = decoded_text.replace(f"{{{key}}}", str(new_val))
                 modified = True
 
             # 2. Check each rule from mapping (traditional placeholders)
-            for json_key, text_in_template in mapping_dict.items():
-                if text_in_template in decoded_text:
+            for json_key, mapping_info in mapping_dict.items():
+                if isinstance(mapping_info, dict):
+                    text_in_template = mapping_info.get("placeholder")
+                    transformations = mapping_info.get("transform", [])
+                else:
+                    text_in_template = mapping_info
+                    transformations = []
+
+                if text_in_template and text_in_template in decoded_text:
                     new_val = find_in_json(static_data, json_key)
-                    if new_val is not None:
-                        decoded_text = decoded_text.replace(text_in_template, str(new_val))
-                        modified = True
+                    if new_val is None:
+                        error_msg = f"Key '{json_key}' not found in static JSON data"
+                        logger.error(error_msg)
+                        raise KeyError(error_msg)
+
+                    if transformations:
+                        new_val = apply_transformations(new_val, transformations)
+
+                    decoded_text = decoded_text.replace(text_in_template, str(new_val))
+                    modified = True
 
             if modified:
                 content_node.text = string_to_hex(decoded_text)
@@ -123,6 +188,11 @@ def generate_amica_vdf(base_template_path, new_csv_path, static_json_path, mappi
 
     with open(output_vdf_path, "w", encoding="utf-8") as f:
         f.write(xml_str)
+
+    logger.info(f"---")
+    logger.info(f"[*] File successfully created: {os.path.basename(output_vdf_path)}")
+    logger.info(f"[*] Used CSV: {os.path.basename(new_csv_path)}")
+    logger.info(f"[*] MD5: {new_md5}")
 
     print(f"---")
     print(f"[*] File successfully created: {os.path.basename(output_vdf_path)}")
@@ -148,5 +218,6 @@ if __name__ == "__main__":
             output_vdf_path=args.output
         )
     except Exception as e:
+        logger.exception(f"[!] Error: {e}")
         print(f"[!] Error: {e}")
         exit(1)
