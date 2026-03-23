@@ -115,6 +115,50 @@ def test_template_patterns_missing_key_in_mapping(tmp_path):
             output_vdf_path=str(output_path)
         )
 
+def test_template_patterns_with_set_value(tmp_path):
+    template_path = tmp_path / "template.vdf"
+    csv_path = tmp_path / "data.csv"
+    json_path = tmp_path / "static.json"
+    mapping_path = tmp_path / "mapping.json"
+    output_path = tmp_path / "output.vdf"
+
+    # \x1d is GS
+    content_text = "Before{GS}AfterPlaceholder"
+    content_hex = string_to_hex(content_text)
+
+    template_content = f"<Vdf><DataSource><SourcePath>x</SourcePath><DataMd5>x</DataMd5></DataSource><Content>{content_hex}</Content></Vdf>"
+    template_path.write_text(template_content)
+    csv_path.write_text("x")
+
+    # Mapping with setValue
+    mapping_data = {
+        "GS": {"setValue": "\x1d"},
+        "StaticReplacement": {
+            "placeholder": "Placeholder",
+            "setValue": "FixedValue"
+        }
+    }
+    mapping_path.write_text(json.dumps(mapping_data))
+
+    # No GS or Placeholder in static data
+    static_data = {}
+    json_path.write_text(json.dumps(static_data))
+
+    generate_amica_vdf(
+        base_template_path=str(template_path),
+        new_csv_path=str(csv_path),
+        static_json_path=str(json_path),
+        mapping_json_path=str(mapping_path),
+        output_vdf_path=str(output_path)
+    )
+
+    tree = ET.parse(output_path)
+    content_node = tree.find(".//Content")
+    decoded_output = hex_to_string(content_node.text)
+
+    # Expected: Before\x1dAfterFixedValue
+    assert decoded_output == "Before\x1dAfterFixedValue"
+
 def test_template_patterns_missing_key_in_static(tmp_path):
     template_path = tmp_path / "template.vdf"
     csv_path = tmp_path / "data.csv"

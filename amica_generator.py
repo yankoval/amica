@@ -131,47 +131,71 @@ def generate_amica_vdf(base_template_path, new_csv_path, static_json_path, mappi
                     raise KeyError(f"Key '{key}' found in template pattern but missing in mapping.json")
 
                 mapping_info = mapping_dict[key]
+                new_val = None
+
                 if isinstance(mapping_info, dict):
-                    lookup_key = mapping_info.get("placeholder")
-                    transformations = mapping_info.get("transform", [])
+                    if "setValue" in mapping_info:
+                        new_val = mapping_info["setValue"]
+                    else:
+                        lookup_key = mapping_info.get("placeholder")
+                        transformations = mapping_info.get("transform", [])
+
+                        if not lookup_key:
+                            raise ValueError(f"No placeholder/lookup key defined for mapping key '{key}'")
+
+                        new_val = find_in_json(static_data, lookup_key)
+                        if new_val is None:
+                            raise KeyError(f"Key '{lookup_key}' (resolved from '{key}') missing in static JSON data")
+
+                        if transformations:
+                            new_val = apply_transformations(new_val, transformations)
                 else:
                     lookup_key = mapping_info
-                    transformations = []
+                    if not lookup_key:
+                        raise ValueError(f"No lookup key defined for mapping key '{key}'")
 
-                if not lookup_key:
-                    raise ValueError(f"No placeholder/lookup key defined for mapping key '{key}'")
-
-                new_val = find_in_json(static_data, lookup_key)
-                if new_val is None:
-                    raise KeyError(f"Key '{lookup_key}' (resolved from '{key}') missing in static JSON data")
-
-                if transformations:
-                    new_val = apply_transformations(new_val, transformations)
+                    new_val = find_in_json(static_data, lookup_key)
+                    if new_val is None:
+                        raise KeyError(f"Key '{lookup_key}' (resolved from '{key}') missing in static JSON data")
 
                 decoded_text = decoded_text.replace(f"{{{key}}}", str(new_val))
                 modified = True
 
             # 2. Check each rule from mapping (traditional placeholders)
             for mapping_key, mapping_info in mapping_dict.items():
+                new_val = None
+                text_in_template = None
+
                 if isinstance(mapping_info, dict):
-                    text_in_template = mapping_info.get("placeholder")
-                    lookup_key = mapping_info.get("placeholder") # Use same as placeholder for lookup
-                    transformations = mapping_info.get("transform", [])
+                    if "setValue" in mapping_info:
+                        new_val = mapping_info["setValue"]
+                        # If placeholder is defined, use it as search text.
+                        # If not, it's ambiguous, but mapping_key is a reasonable fallback.
+                        text_in_template = mapping_info.get("placeholder", mapping_key)
+                    else:
+                        text_in_template = mapping_info.get("placeholder")
+                        lookup_key = mapping_info.get("placeholder")
+                        transformations = mapping_info.get("transform", [])
+
+                        if text_in_template and text_in_template in decoded_text:
+                            new_val = find_in_json(static_data, lookup_key)
+                            if new_val is None:
+                                error_msg = f"Key '{lookup_key}' not found in static JSON data"
+                                logger.error(error_msg)
+                                raise KeyError(error_msg)
+                            if transformations:
+                                new_val = apply_transformations(new_val, transformations)
                 else:
                     text_in_template = mapping_info
                     lookup_key = mapping_info
-                    transformations = []
+                    if text_in_template and text_in_template in decoded_text:
+                        new_val = find_in_json(static_data, lookup_key)
+                        if new_val is None:
+                            error_msg = f"Key '{lookup_key}' not found in static JSON data"
+                            logger.error(error_msg)
+                            raise KeyError(error_msg)
 
-                if text_in_template and text_in_template in decoded_text:
-                    new_val = find_in_json(static_data, lookup_key)
-                    if new_val is None:
-                        error_msg = f"Key '{lookup_key}' not found in static JSON data"
-                        logger.error(error_msg)
-                        raise KeyError(error_msg)
-
-                    if transformations:
-                        new_val = apply_transformations(new_val, transformations)
-
+                if text_in_template and text_in_template in decoded_text and new_val is not None:
                     decoded_text = decoded_text.replace(text_in_template, str(new_val))
                     modified = True
 
