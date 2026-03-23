@@ -1,0 +1,25 @@
+{
+  "article": {
+    "placeholder": "Placeholder_Article",
+    "transform": [
+      {
+        "type": "regex",
+        "pattern": "^[A-Z]+-",
+        "replacement": ""
+      }
+    ]
+  },
+  "batch_date": {
+    "placeholder": "Date_Placeholder",
+    "transform": [
+      {
+        "type": "strptime",
+        "format": "%Y-%m-%d"
+      },
+      {
+        "type": "strftime",
+        "format": "%m.%Y"
+      }
+    ]
+  }
+}

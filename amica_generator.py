@@ -4,6 +4,17 @@ import os
 import json
 import re
 import argparse
+import logging
+from logging.handlers import RotatingFileHandler
+from datetime import datetime
+
+# Setup logging
+logger = logging.getLogger("amica_generator")
+logger.setLevel(logging.DEBUG)
+handler = RotatingFileHandler("amica_generator.log", maxBytes=1*1024*1024, backupCount=5)
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+handler.setFormatter(formatter)
+logger.addHandler(handler)
 
 def calculate_md5(file_path):
     """Calculates MD5 hash of a file for the DataSource section in VDF."""
@@ -14,6 +25,14 @@ def calculate_md5(file_path):
         for chunk in iter(lambda: f.read(4096), b""):
             hash_md5.update(chunk)
     return hash_md5.hexdigest().upper()
+
+def count_csv_rows(file_path):
+    """Counts number of lines in the CSV/data file."""
+    if not os.path.exists(file_path):
+        raise FileNotFoundError(f"Data file not found: {file_path}")
+    with open(file_path, 'r', encoding='utf-8') as f:
+        # We assume one record per line as per the user's logic
+        return sum(1 for line in f if line.strip())
 
 def string_to_hex(text):
     """Encodes string to Hex format (UTF-8) for Amica."""
@@ -44,11 +63,43 @@ def find_in_json(data, target_key):
                 return res
     return None
 
-def generate_amica_vdf(base_template_path, new_csv_path, static_json_path, mapping_json_path, output_vdf_path):
+def apply_transformations(value, transformations):
+    """Applies a list of transformations to a value."""
+    current_value = value
+    for trans in transformations:
+        trans_type = trans.get("type")
+        try:
+            if trans_type == "strptime":
+                fmt = trans.get("format")
+                if not fmt:
+                    raise ValueError("Missing 'format' for strptime transformation")
+                current_value = datetime.strptime(current_value, fmt)
+            elif trans_type == "strftime":
+                fmt = trans.get("format")
+                if not fmt:
+                    raise ValueError("Missing 'format' for strftime transformation")
+                if not isinstance(current_value, datetime):
+                    raise TypeError(f"strftime expected datetime object, got {type(current_value)}")
+                current_value = current_value.strftime(fmt)
+            elif trans_type == "regex":
+                pattern = trans.get("pattern")
+                replacement = trans.get("replacement")
+                if pattern is None or replacement is None:
+                    raise ValueError("Missing 'pattern' or 'replacement' for regex transformation")
+                current_value = re.sub(pattern, replacement, str(current_value))
+            else:
+                raise ValueError(f"Unknown transformation type: {trans_type}")
+        except Exception as e:
+            logger.error(f"Transformation failed: {trans}. Value: {current_value}. Error: {e}")
+            raise
+    return current_value
+
+def generate_amica_vdf(base_template_path, new_csv_path, static_json_path, mapping_json_path, output_vdf_path, filename_mask="{OriginalFileName}"):
     """Main function to generate VDF by substituting static and dynamic data."""
 
-    # 1. Calculate MD5 of the new CSV file
+    # 1. Calculate MD5 and row count of the new CSV file
     new_md5 = calculate_md5(new_csv_path)
+    record_count = count_csv_rows(new_csv_path)
 
     # 2. Load data
     with open(static_json_path, 'r', encoding='utf-8') as f:
@@ -56,6 +107,34 @@ def generate_amica_vdf(base_template_path, new_csv_path, static_json_path, mappi
 
     with open(mapping_json_path, 'r', encoding='utf-8') as f:
         mapping_dict = json.load(f)
+
+    # 2.1 Pre-calculate transformed values for masking and mapping
+    transformed_values = {}
+    for json_key, mapping_info in mapping_dict.items():
+        if isinstance(mapping_info, dict):
+            transformations = mapping_info.get("transform", [])
+        else:
+            transformations = []
+
+        val = find_in_json(static_data, json_key)
+        if val is None:
+            error_msg = f"Key '{json_key}' not found in static JSON data"
+            logger.error(error_msg)
+            raise KeyError(error_msg)
+
+        if transformations:
+            val = apply_transformations(val, transformations)
+
+        transformed_values[json_key] = str(val)
+
+    # 2.2 Resolve output filename
+    original_filename = os.path.basename(output_vdf_path)
+    resolved_filename = filename_mask.replace("{OriginalFileName}", original_filename)
+    for key, val in transformed_values.items():
+        resolved_filename = resolved_filename.replace(f"{{{key}}}", val)
+
+    output_dir = os.path.dirname(output_vdf_path)
+    final_output_path = os.path.join(output_dir, resolved_filename)
 
     # 3. Parse VDF template (XML)
     tree = ET.parse(base_template_path)
@@ -73,6 +152,19 @@ def generate_amica_vdf(base_template_path, new_csv_path, static_json_path, mappi
         if md5_node is not None:
             md5_node.text = new_md5
 
+    # 4.1 Update RipParam (Print parameters)
+    rip_param = root.find(".//RipParam")
+    if rip_param is not None:
+        # Set total record count
+        end_no = rip_param.find("EndNo")
+        if end_no is not None:
+            end_no.text = str(record_count)
+
+        # Set range (e.g., "0-99" for 100 records)
+        out_records = rip_param.find("OutputRecords")
+        if out_records is not None:
+            out_records.text = f"0-{max(0, record_count - 1)}"
+
     # 5. Update static part (Text blocks)
     for content_node in root.findall(".//Content"):
         if content_node.text:
@@ -82,23 +174,27 @@ def generate_amica_vdf(base_template_path, new_csv_path, static_json_path, mappi
 
             modified = False
             # Check each rule from mapping
-            for json_key, text_in_template in mapping_dict.items():
-                if text_in_template in decoded_text:
-                    new_val = find_in_json(static_data, json_key)
-                    if new_val is not None:
-                        decoded_text = decoded_text.replace(text_in_template, str(new_val))
-                        modified = True
+            for json_key, mapping_info in mapping_dict.items():
+                if isinstance(mapping_info, dict):
+                    text_in_template = mapping_info.get("placeholder")
+                else:
+                    text_in_template = mapping_info
+
+                if text_in_template and text_in_template in decoded_text:
+                    new_val = transformed_values[json_key]
+                    decoded_text = decoded_text.replace(text_in_template, new_val)
+                    modified = True
 
             if modified:
                 content_node.text = string_to_hex(decoded_text)
 
     # 6. Save the result
     # short_empty_elements=False ensures <Content></Content> instead of <Content />
-    with open(output_vdf_path, 'wb') as f:
+    with open(final_output_path, 'wb') as f:
         tree.write(f, encoding="utf-8", xml_declaration=True, short_empty_elements=False)
 
     # 7. Final touch: wrap Hex text (or empty) in CDATA
-    with open(output_vdf_path, "r", encoding="utf-8") as f:
+    with open(final_output_path, "r", encoding="utf-8") as f:
         xml_str = f.read()
 
     # Replace content of <Content>...</Content> with CDATA
@@ -107,13 +203,13 @@ def generate_amica_vdf(base_template_path, new_csv_path, static_json_path, mappi
     # Handle self-closing tags just in case
     xml_str = xml_str.replace('<Content />', '<Content><![CDATA[]]></Content>')
 
-    with open(output_vdf_path, "w", encoding="utf-8") as f:
+    with open(final_output_path, "w", encoding="utf-8") as f:
         f.write(xml_str)
 
-    print(f"---")
-    print(f"[*] File successfully created: {os.path.basename(output_vdf_path)}")
-    print(f"[*] Used CSV: {os.path.basename(new_csv_path)}")
-    print(f"[*] MD5: {new_md5}")
+    logger.info(f"---")
+    logger.info(f"[*] File successfully created: {os.path.basename(final_output_path)}")
+    logger.info(f"[*] Used CSV: {os.path.basename(new_csv_path)}")
+    logger.info(f"[*] MD5: {new_md5}")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Amica VDF Generator")
@@ -122,6 +218,7 @@ if __name__ == "__main__":
     parser.add_argument("--json", required=True, help="Path to static JSON data")
     parser.add_argument("--mapping", default="mapping.json", help="Path to mapping JSON file")
     parser.add_argument("--output", required=True, help="Path for the output VDF file")
+    parser.add_argument("--filename-mask", default="{OriginalFileName}", help="Mask for output filename (e.g. '{Product_gtin}_{OriginalFileName}')")
 
     args = parser.parse_args()
 
@@ -131,8 +228,10 @@ if __name__ == "__main__":
             new_csv_path=args.csv,
             static_json_path=args.json,
             mapping_json_path=args.mapping,
-            output_vdf_path=args.output
+            output_vdf_path=args.output,
+            filename_mask=args.filename_mask
         )
     except Exception as e:
+        logger.exception(f"[!] Error: {e}")
         print(f"[!] Error: {e}")
         exit(1)

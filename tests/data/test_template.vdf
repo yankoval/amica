@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<VdfFile>
+    <DataSourceSet>
+        <DataSource>
+            <SourcePath>DUMMY.CSV</SourcePath>
+            <DataMd5>DUMMY_MD5</DataMd5>
+        </DataSource>
+    </DataSourceSet>
+    <RipParam>
+        <EndNo>1</EndNo>
+        <OutputRecords>0-0</OutputRecords>
+    </RipParam>
+    <Label>
+        <Content>506C616365686F6C6465725F41727469636C65</Content> <!-- Placeholder_Article -->
+    </Label>
+    <Label>
+        <Content>446174655F506C616365686F6C646572</Content> <!-- Date_Placeholder -->
+    </Label>
+</VdfFile>
