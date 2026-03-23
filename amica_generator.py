@@ -27,12 +27,20 @@ def calculate_md5(file_path):
     return hash_md5.hexdigest().upper()
 
 def count_csv_rows(file_path):
-    """Counts number of lines in the CSV/data file."""
+    """Counts number of data records in the CSV/data file (excluding header)."""
     if not os.path.exists(file_path):
         raise FileNotFoundError(f"Data file not found: {file_path}")
     with open(file_path, 'r', encoding='utf-8') as f:
-        # We assume one record per line as per the user's logic
-        return sum(1 for line in f if line.strip())
+        # Count all non-empty lines
+        total_lines = sum(1 for line in f if line.strip())
+
+    # Subtract 1 for the header
+    record_count = total_lines - 1
+
+    if record_count <= 0:
+        raise ValueError(f"Data file {file_path} contains no records (only header or empty).")
+
+    return record_count
 
 def string_to_hex(text):
     """Encodes string to Hex format (UTF-8) for Amica."""
@@ -111,19 +119,23 @@ def generate_amica_vdf(base_template_path, new_csv_path, static_json_path, mappi
     # 2.1 Pre-calculate transformed values for masking and mapping
     transformed_values = {}
     for json_key, mapping_info in mapping_dict.items():
-        if isinstance(mapping_info, dict):
-            transformations = mapping_info.get("transform", [])
+        if isinstance(mapping_info, dict) and "setValue" in mapping_info:
+            # If setValue is provided, use it directly (skip lookup and transforms)
+            val = mapping_info["setValue"]
         else:
-            transformations = []
+            if isinstance(mapping_info, dict):
+                transformations = mapping_info.get("transform", [])
+            else:
+                transformations = []
 
-        val = find_in_json(static_data, json_key)
-        if val is None:
-            error_msg = f"Key '{json_key}' not found in static JSON data"
-            logger.error(error_msg)
-            raise KeyError(error_msg)
+            val = find_in_json(static_data, json_key)
+            if val is None:
+                error_msg = f"Key '{json_key}' not found in static JSON data"
+                logger.error(error_msg)
+                raise KeyError(error_msg)
 
-        if transformations:
-            val = apply_transformations(val, transformations)
+            if transformations:
+                val = apply_transformations(val, transformations)
 
         transformed_values[json_key] = str(val)
 
@@ -173,7 +185,15 @@ def generate_amica_vdf(base_template_path, new_csv_path, static_json_path, mappi
                 continue
 
             modified = False
-            # Check each rule from mapping
+
+            # Replace braced patterns like {key} with transformed values
+            for key, val in transformed_values.items():
+                braced_key = f"{{{key}}}"
+                if braced_key in decoded_text:
+                    decoded_text = decoded_text.replace(braced_key, val)
+                    modified = True
+
+            # Check each rule from mapping (traditional placeholders)
             for json_key, mapping_info in mapping_dict.items():
                 if isinstance(mapping_info, dict):
                     text_in_template = mapping_info.get("placeholder")
@@ -190,6 +210,7 @@ def generate_amica_vdf(base_template_path, new_csv_path, static_json_path, mappi
 
     # 6. Save the result
     # short_empty_elements=False ensures <Content></Content> instead of <Content />
+    # This is important for the subsequent regex replacement of Content tags.
     with open(final_output_path, 'wb') as f:
         tree.write(f, encoding="utf-8", xml_declaration=True, short_empty_elements=False)
 
@@ -199,9 +220,6 @@ def generate_amica_vdf(base_template_path, new_csv_path, static_json_path, mappi
 
     # Replace content of <Content>...</Content> with CDATA
     xml_str = re.sub(r'<Content[^>]*>(.*?)</Content>', r'<Content><![CDATA[\1]]></Content>', xml_str)
-
-    # Handle self-closing tags just in case
-    xml_str = xml_str.replace('<Content />', '<Content><![CDATA[]]></Content>')
 
     with open(final_output_path, "w", encoding="utf-8") as f:
         f.write(xml_str)
