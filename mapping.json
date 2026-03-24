@@ -11,5 +11,14 @@
   "Batch_BN_1С":"Batch_BN_1С",
   "Batch_date_packing_descr":"Batch_date_packing_descr",
   "Batch_date_expired_descr":"Batch_date_expired_descr",
-  "client_AdditionalInfo": "client_AdditionalInfo"
+  "client_AdditionalInfo": "client_AdditionalInfo",
+  "Product_PackBarcode": {
+    "placeholder": "Product_PackBarcode",
+    "transform": [
+      {
+        "type": "zfill",
+        "width": 14
+      }
+    ]
+  }
 }

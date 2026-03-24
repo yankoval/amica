@@ -95,6 +95,11 @@ def apply_transformations(value, transformations):
                 if pattern is None or replacement is None:
                     raise ValueError("Missing 'pattern' or 'replacement' for regex transformation")
                 current_value = re.sub(pattern, replacement, str(current_value))
+            elif trans_type == "zfill":
+                width = trans.get("width")
+                if width is None:
+                    raise ValueError("Missing 'width' for zfill transformation")
+                current_value = str(current_value).zfill(int(width))
             else:
                 raise ValueError(f"Unknown transformation type: {trans_type}")
         except Exception as e:
