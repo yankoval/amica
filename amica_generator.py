@@ -95,6 +95,11 @@ def apply_transformations(value, transformations):
                 if pattern is None or replacement is None:
                     raise ValueError("Missing 'pattern' or 'replacement' for regex transformation")
                 current_value = re.sub(pattern, replacement, str(current_value))
+            elif trans_type == "zfill":
+                width = trans.get("width")
+                if width is None:
+                    raise ValueError("Missing 'width' for zfill transformation")
+                current_value = str(current_value).zfill(int(width))
             else:
                 raise ValueError(f"Unknown transformation type: {trans_type}")
         except Exception as e:
@@ -181,7 +186,23 @@ def generate_amica_vdf(base_template_path, new_csv_path, static_json_path, mappi
     parent_map = {c: p for p in root.iter() for c in p}
     for content_node in root.findall(".//Content"):
         if content_node.text:
-            decoded_text = hex_to_string(content_node.text)
+            # Logic: for VariableText, we take source from TextTemplate, not Content itself.
+            source_node = content_node
+            is_variable_text = False
+            text_template_node = None
+
+            # Content -> Text -> VariableText
+            text_node = parent_map.get(content_node)
+            if text_node is not None and text_node.tag == "Text":
+                var_text_node = parent_map.get(text_node)
+                if var_text_node is not None and var_text_node.tag == "VariableText" and \
+                   var_text_node.get("FullName") == "Amica.Vdp.Common.Element.VdpVariableText":
+                    is_variable_text = True
+                    text_template_node = var_text_node.find("TextTemplate")
+                    if text_template_node is not None and text_template_node.text:
+                        source_node = text_template_node
+
+            decoded_text = hex_to_string(source_node.text)
             if not decoded_text:
                 continue
 
@@ -209,17 +230,8 @@ def generate_amica_vdf(base_template_path, new_csv_path, static_json_path, mappi
             if modified:
                 new_hex = string_to_hex(decoded_text)
                 content_node.text = new_hex
-
-                # If Content of VariableText was modified, update TextTemplate if exists
-                # Content -> Text -> VariableText
-                text_node = parent_map.get(content_node)
-                if text_node is not None and text_node.tag == "Text":
-                    var_text_node = parent_map.get(text_node)
-                    if var_text_node is not None and var_text_node.tag == "VariableText" and \
-                       var_text_node.get("FullName") == "Amica.Vdp.Common.Element.VdpVariableText":
-                        text_template_node = var_text_node.find("TextTemplate")
-                        if text_template_node is not None:
-                            text_template_node.text = new_hex
+                if is_variable_text and text_template_node is not None:
+                    text_template_node.text = new_hex
 
     # 6. Save the result
     # short_empty_elements=False ensures <Content></Content> instead of <Content />
