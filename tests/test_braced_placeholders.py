@@ -28,8 +28,9 @@ def test_braced_placeholder_replacement(tmp_path):
     json_path.write_text('{"Batch_number": "BATCH123"}')
 
     # Mapping
+    # Changed GS_key to use setValue so it doesn't try to look up GS_key in static JSON
     mapping_path = tmp_path / "mapping.json"
-    mapping_path.write_text('{"Batch_number": "BATCH_PLACEHOLDER", "GS_key": {"setValue": "GS_VALUE", "placeholder": "GS_key"}}')
+    mapping_path.write_text('[{"Batch_number": "BATCH_PLACEHOLDER"}, {"placeholder": "GS_key", "setValue": "GS_VALUE"}]')
 
     output_path = tmp_path / "output.vdf"
 
@@ -74,7 +75,7 @@ def test_placeholder_replacement_without_braces(tmp_path):
 
     # Mapping
     mapping_path = tmp_path / "mapping.json"
-    mapping_path.write_text('{"Batch_number": "BATCH_PLACEHOLDER", "GS_key": {"setValue": "GS_VALUE", "placeholder": "GS_key"}}')
+    mapping_path.write_text('[{"Batch_number": "BATCH_PLACEHOLDER"}, {"placeholder": "GS_key", "setValue": "GS_VALUE"}]')
 
     output_path = tmp_path / "output.vdf"
 

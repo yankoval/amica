@@ -42,7 +42,7 @@ def test_missing_key(tmp_path):
     csv_data = "tests/data/test_dummy.csv"
     static_json = "tests/data/test_data.json"
     # mapping refers to a key that doesn't exist in test_data.json
-    mapping_content = '{"non_existent": {"placeholder": "Placeholder_Article"}}'
+    mapping_content = '[{"non_existent": {"placeholder": "Placeholder_Article"}}]'
     mapping_file = tmp_path / "missing_key_mapping.json"
     mapping_file.write_text(mapping_content)
 
@@ -56,7 +56,7 @@ def test_invalid_transformation(tmp_path):
     csv_data = "tests/data/test_dummy.csv"
     static_json = "tests/data/test_data.json"
     # invalid date format
-    mapping_content = '{"batch_date": {"placeholder": "Date_Placeholder", "transform": [{"type": "strptime", "format": "%d-%m-%Y"}]}}'
+    mapping_content = '[{"batch_date": {"placeholder": "Date_Placeholder", "transform": [{"type": "strptime", "format": "%d-%m-%Y"}]}}]'
     mapping_file = tmp_path / "invalid_trans_mapping.json"
     mapping_file.write_text(mapping_content)
 
@@ -66,15 +66,17 @@ def test_invalid_transformation(tmp_path):
         generate_amica_vdf(template, csv_data, static_json, str(mapping_file), str(output))
 
 def test_backward_compatibility(tmp_path):
+    # This test name is now a misnomer as we dropped backward compatibility for dicts,
+    # but we test the simple "key": "placeholder" format within the list.
     template = "tests/data/test_template.vdf"
     csv_data = "tests/data/test_dummy.csv"
     static_json = "tests/data/test_data.json"
-    # Old format: key-to-placeholder
-    mapping_content = '{"article": "Placeholder_Article"}'
-    mapping_file = tmp_path / "old_mapping.json"
+    # New format: list of simple key-to-placeholder
+    mapping_content = '[{"article": "Placeholder_Article"}]'
+    mapping_file = tmp_path / "simple_list_mapping.json"
     mapping_file.write_text(mapping_content)
 
-    output = tmp_path / "output_old.vdf"
+    output = tmp_path / "output_simple.vdf"
 
     generate_amica_vdf(template, csv_data, static_json, str(mapping_file), str(output))
 

@@ -119,25 +119,55 @@ def generate_amica_vdf(base_template_path, new_csv_path, static_json_path, mappi
         static_data = json.load(f)
 
     with open(mapping_json_path, 'r', encoding='utf-8') as f:
-        mapping_dict = json.load(f)
+        mapping_list = json.load(f)
+
+    if not isinstance(mapping_list, list):
+        error_msg = "Mapping file must contain a list of dictionaries"
+        logger.error(error_msg)
+        raise ValueError(error_msg)
 
     # 2.1 Pre-calculate transformed values and validate placeholders
     placeholder_to_value = {}
     placeholders_seen = set()
 
-    for json_key, mapping_info in mapping_dict.items():
-        # Identify the placeholder
-        if isinstance(mapping_info, dict):
-            placeholder = mapping_info.get("placeholder")
+    for mapping_item in mapping_list:
+        if not isinstance(mapping_item, dict):
+            error_msg = f"Mapping item must be a dictionary, got {type(mapping_item)}"
+            logger.error(error_msg)
+            raise ValueError(error_msg)
+
+        # Identify the placeholder and value source
+        if "setValue" in mapping_item:
+            placeholder = mapping_item.get("placeholder")
             if placeholder is None:
-                error_msg = f"Mapping for key '{json_key}' is missing required 'placeholder' field"
+                error_msg = "Mapping item with 'setValue' is missing required 'placeholder' field"
                 logger.error(error_msg)
                 raise ValueError(error_msg)
-            transformations = mapping_info.get("transform", [])
-            set_value = mapping_info.get("setValue")
+            set_value = mapping_item["setValue"]
+            transformations = mapping_item.get("transform", [])
+            json_key = None
         else:
-            placeholder = mapping_info
-            transformations = []
+            # Expected exactly one key (json_key)
+            keys = list(mapping_item.keys())
+            if len(keys) != 1:
+                error_msg = f"Mapping item must contain exactly one JSON key, but found {len(keys)}: {keys}"
+                logger.error(error_msg)
+                raise ValueError(error_msg)
+
+            json_key = keys[0]
+            mapping_info = mapping_item[json_key]
+
+            if isinstance(mapping_info, dict):
+                placeholder = mapping_info.get("placeholder")
+                if placeholder is None:
+                    error_msg = f"Mapping for key '{json_key}' is missing required 'placeholder' field"
+                    logger.error(error_msg)
+                    raise ValueError(error_msg)
+                transformations = mapping_info.get("transform", [])
+            else:
+                placeholder = mapping_info
+                transformations = []
+
             set_value = None
 
         # Check for duplicate placeholders
@@ -157,8 +187,8 @@ def generate_amica_vdf(base_template_path, new_csv_path, static_json_path, mappi
                 logger.error(error_msg)
                 raise KeyError(error_msg)
 
-            if transformations:
-                val = apply_transformations(val, transformations)
+        if transformations:
+            val = apply_transformations(val, transformations)
 
         placeholder_to_value[placeholder] = str(val)
 

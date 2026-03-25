@@ -1,8 +1,8 @@
+import pytest
 import os
 import json
-import pytest
-from amica_generator import generate_amica_vdf, hex_to_string
 import xml.etree.ElementTree as ET
+from amica_generator import generate_amica_vdf, hex_to_string, string_to_hex
 
 def test_zfill_transformation(tmp_path):
     template = "tests/data/test_template.vdf"
@@ -19,26 +19,24 @@ def test_zfill_transformation(tmp_path):
         json.dump(static_data, f)
 
     # Create mapping with zfill transformation
-    mapping_data = {
-        "Product_PackBarcode": {
-            "placeholder": "Product_PackBarcode",
-            "transform": [
-                {
-                    "type": "zfill",
-                    "width": 14
-                }
-            ]
+    mapping_data = [
+        {
+            "Product_PackBarcode": {
+                "placeholder": "Product_PackBarcode",
+                "transform": [
+                    {
+                        "type": "zfill",
+                        "width": 14
+                    }
+                ]
+            }
         }
-    }
+    ]
     with open(mapping, 'w', encoding='utf-8') as f:
         json.dump(mapping_data, f)
 
-    # We need a template that has "Product_PackBarcode" in it.
-    # Let's use the existing test_template.vdf but it might not have Product_PackBarcode.
-    # We can check if it has any placeholder we can swap for testing.
-
     # Create a simple template with our placeholder in hex
-    placeholder_hex = "Product_PackBarcode".encode('utf-8').hex().upper()
+    placeholder_hex = string_to_hex("Product_PackBarcode")
     template_content = f"""<?xml version="1.0" encoding="utf-8"?>
 <VdfFile>
     <DataSourceSet>
@@ -62,17 +60,13 @@ def test_zfill_transformation(tmp_path):
     generate_amica_vdf(str(test_template), csv_data, str(static_json), str(mapping), str(output))
 
     assert os.path.exists(output)
-
-    # Parse output VDF
     tree = ET.parse(output)
     root = tree.getroot()
 
-    contents = []
-    for content in root.findall(".//Content"):
-        contents.append(hex_to_string(content.text))
-
-    # "1234567890123" with zfill(14) -> "01234567890123"
-    assert "01234567890123" in contents
+    content = root.find(".//Content")
+    assert content is not None
+    # 13 digits "1234567890123" zfilled to 14 -> "01234567890123"
+    assert hex_to_string(content.text) == "01234567890123"
 
 def test_zfill_missing_width(tmp_path):
     template = "tests/data/test_template.vdf"
@@ -85,12 +79,14 @@ def test_zfill_missing_width(tmp_path):
     with open(static_json, 'w', encoding='utf-8') as f:
         json.dump(static_data, f)
 
-    mapping_data = {
-        "key": {
-            "placeholder": "placeholder",
-            "transform": [{"type": "zfill"}]
+    mapping_data = [
+        {
+            "key": {
+                "placeholder": "placeholder",
+                "transform": [{"type": "zfill"}]
+            }
         }
-    }
+    ]
     with open(mapping, 'w', encoding='utf-8') as f:
         json.dump(mapping_data, f)
 
