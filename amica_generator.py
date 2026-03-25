@@ -137,38 +137,42 @@ def generate_amica_vdf(base_template_path, new_csv_path, static_json_path, mappi
             raise ValueError(error_msg)
 
         # Identify the placeholder and value source
-        if "setValue" in mapping_item:
-            placeholder = mapping_item.get("placeholder")
-            if placeholder is None:
-                error_msg = "Mapping item with 'setValue' is missing required 'placeholder' field"
-                logger.error(error_msg)
-                raise ValueError(error_msg)
-            set_value = mapping_item["setValue"]
-            transformations = mapping_item.get("transform", [])
-            json_key = None
-        else:
-            # Expected exactly one key (json_key)
-            keys = list(mapping_item.keys())
-            if len(keys) != 1:
+        keys = list(mapping_item.keys())
+        if len(keys) != 1:
+            # Maybe it's an explicit Variant A: { "setValue": "...", "placeholder": "..." }
+            if "setValue" in mapping_item and "placeholder" in mapping_item:
+                placeholder = mapping_item["placeholder"]
+                set_value = mapping_item["setValue"]
+                transformations = mapping_item.get("transform", [])
+                json_key = None
+            else:
                 error_msg = f"Mapping item must contain exactly one JSON key, but found {len(keys)}: {keys}"
                 logger.error(error_msg)
                 raise ValueError(error_msg)
-
+        else:
             json_key = keys[0]
             mapping_info = mapping_item[json_key]
 
             if isinstance(mapping_info, dict):
-                placeholder = mapping_info.get("placeholder")
-                if placeholder is None:
-                    error_msg = f"Mapping for key '{json_key}' is missing required 'placeholder' field"
-                    logger.error(error_msg)
-                    raise ValueError(error_msg)
-                transformations = mapping_info.get("transform", [])
+                if "setValue" in mapping_info:
+                    # Variant B with setValue
+                    placeholder = mapping_info.get("placeholder", json_key)
+                    set_value = mapping_info["setValue"]
+                    transformations = mapping_info.get("transform", [])
+                else:
+                    # Variant B with transform/placeholder
+                    placeholder = mapping_info.get("placeholder")
+                    if placeholder is None:
+                        error_msg = f"Mapping for key '{json_key}' is missing required 'placeholder' field"
+                        logger.error(error_msg)
+                        raise ValueError(error_msg)
+                    transformations = mapping_info.get("transform", [])
+                    set_value = None
             else:
+                # Simple variant
                 placeholder = mapping_info
                 transformations = []
-
-            set_value = None
+                set_value = None
 
         # Check for duplicate placeholders
         if placeholder in placeholders_seen:
