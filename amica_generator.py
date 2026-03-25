@@ -121,18 +121,36 @@ def generate_amica_vdf(base_template_path, new_csv_path, static_json_path, mappi
     with open(mapping_json_path, 'r', encoding='utf-8') as f:
         mapping_dict = json.load(f)
 
-    # 2.1 Pre-calculate transformed values for masking and mapping
-    transformed_values = {}
-    for json_key, mapping_info in mapping_dict.items():
-        if isinstance(mapping_info, dict) and "setValue" in mapping_info:
-            # If setValue is provided, use it directly (skip lookup and transforms)
-            val = mapping_info["setValue"]
-        else:
-            if isinstance(mapping_info, dict):
-                transformations = mapping_info.get("transform", [])
-            else:
-                transformations = []
+    # 2.1 Pre-calculate transformed values and validate placeholders
+    placeholder_to_value = {}
+    placeholders_seen = set()
 
+    for json_key, mapping_info in mapping_dict.items():
+        # Identify the placeholder
+        if isinstance(mapping_info, dict):
+            placeholder = mapping_info.get("placeholder")
+            if placeholder is None:
+                error_msg = f"Mapping for key '{json_key}' is missing required 'placeholder' field"
+                logger.error(error_msg)
+                raise ValueError(error_msg)
+            transformations = mapping_info.get("transform", [])
+            set_value = mapping_info.get("setValue")
+        else:
+            placeholder = mapping_info
+            transformations = []
+            set_value = None
+
+        # Check for duplicate placeholders
+        if placeholder in placeholders_seen:
+            error_msg = f"Duplicate placeholder '{placeholder}' found in mapping"
+            logger.error(error_msg)
+            raise ValueError(error_msg)
+        placeholders_seen.add(placeholder)
+
+        # Resolve value
+        if set_value is not None:
+            val = set_value
+        else:
             val = find_in_json(static_data, json_key)
             if val is None:
                 error_msg = f"Key '{json_key}' not found in static JSON data"
@@ -142,13 +160,13 @@ def generate_amica_vdf(base_template_path, new_csv_path, static_json_path, mappi
             if transformations:
                 val = apply_transformations(val, transformations)
 
-        transformed_values[json_key] = str(val)
+        placeholder_to_value[placeholder] = str(val)
 
     # 2.2 Resolve output filename
     original_filename = os.path.basename(output_vdf_path)
     resolved_filename = filename_mask.replace("{OriginalFileName}", original_filename)
-    for key, val in transformed_values.items():
-        resolved_filename = resolved_filename.replace(f"{{{key}}}", val)
+    for placeholder, val in placeholder_to_value.items():
+        resolved_filename = resolved_filename.replace(f"{{{placeholder}}}", val)
 
     output_dir = os.path.dirname(output_vdf_path)
     final_output_path = os.path.join(output_dir, resolved_filename)
@@ -208,23 +226,17 @@ def generate_amica_vdf(base_template_path, new_csv_path, static_json_path, mappi
 
             modified = False
 
-            # Replace braced patterns like {key} with transformed values
-            for key, val in transformed_values.items():
-                braced_key = f"{{{key}}}"
-                if braced_key in decoded_text:
-                    decoded_text = decoded_text.replace(braced_key, val)
+            # Replace both braced {placeholder} and direct placeholder in VDF content
+            for placeholder, val in placeholder_to_value.items():
+                braced_placeholder = f"{{{placeholder}}}"
+
+                # Check for braced version first to avoid partial replacements if possible
+                if braced_placeholder in decoded_text:
+                    decoded_text = decoded_text.replace(braced_placeholder, val)
                     modified = True
 
-            # Check each rule from mapping (traditional placeholders)
-            for json_key, mapping_info in mapping_dict.items():
-                if isinstance(mapping_info, dict):
-                    text_in_template = mapping_info.get("placeholder")
-                else:
-                    text_in_template = mapping_info
-
-                if text_in_template and text_in_template in decoded_text:
-                    new_val = transformed_values[json_key]
-                    decoded_text = decoded_text.replace(text_in_template, new_val)
+                if placeholder in decoded_text:
+                    decoded_text = decoded_text.replace(placeholder, val)
                     modified = True
 
             if modified:

@@ -95,7 +95,8 @@ def test_filename_mask(tmp_path):
     mapping = "tests/data/test_mapping.json"
     output = tmp_path / "original.vdf"
 
-    mask = "{article}_{OriginalFileName}"
+    # Use placeholder in mask, NOT the json key
+    mask = "{Placeholder_Article}_{OriginalFileName}"
     # article in test_data.json is "ABC-123", transform regex "^[A-Z]+-" -> "123"
 
     generate_amica_vdf(template, csv_data, static_json, mapping, str(output), filename_mask=mask)
