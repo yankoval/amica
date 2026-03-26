@@ -52,7 +52,7 @@ def test_braced_placeholder_replacement(tmp_path):
     # {BATCH_PLACEHOLDER} and {GS_key} should be replaced
     assert decoded_text == "Batch: BATCH123, GS: GS_VALUE"
 
-def test_placeholder_replacement_without_braces(tmp_path):
+def test_exact_placeholder_replacement_without_braces(tmp_path):
     template_path = tmp_path / "template.vdf"
     template_path.write_text(f"""<?xml version="1.0" encoding="utf-8"?>
 <File Format="Amica.VDF">
@@ -60,7 +60,7 @@ def test_placeholder_replacement_without_braces(tmp_path):
     <Page>
       <RipParam><EndNo>1</EndNo><OutputRecords>0-0</OutputRecords></RipParam>
       <DataSourceSet><DataSource><DataPathInfo><SourcePath>old.csv</SourcePath></DataPathInfo><DataMd5>OLDMD5</DataMd5></DataSource></DataSourceSet>
-      <Content><![CDATA[{string_to_hex("Batch: BATCH_PLACEHOLDER, GS: GS_key")}]]></Content>
+      <Content><![CDATA[{string_to_hex("BATCH_PLACEHOLDER")}]]></Content>
     </Page>
   </VDPPage>
 </File>
@@ -75,7 +75,7 @@ def test_placeholder_replacement_without_braces(tmp_path):
 
     # Mapping
     mapping_path = tmp_path / "mapping.json"
-    mapping_path.write_text('[{"Batch_number": "BATCH_PLACEHOLDER"}, {"placeholder": "GS_key", "setValue": "GS_VALUE"}]')
+    mapping_path.write_text('[{"Batch_number": "BATCH_PLACEHOLDER"}]')
 
     output_path = tmp_path / "output.vdf"
 
@@ -94,5 +94,5 @@ def test_placeholder_replacement_without_braces(tmp_path):
     content_node = root.find(".//Content")
     assert content_node is not None
     decoded_text = hex_to_string(content_node.text)
-    # BATCH_PLACEHOLDER and GS_key should be replaced even without braces
-    assert decoded_text == "Batch: BATCH123, GS: GS_VALUE"
+    # BATCH_PLACEHOLDER should be replaced exactly
+    assert decoded_text == "BATCH123"

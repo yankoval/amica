@@ -199,7 +199,11 @@ def generate_amica_vdf(base_template_path, new_csv_path, static_json_path, mappi
     # 2.2 Resolve output filename
     original_filename = os.path.basename(output_vdf_path)
     resolved_filename = filename_mask.replace("{OriginalFileName}", original_filename)
-    for placeholder, val in placeholder_to_value.items():
+
+    # Sort placeholders by length descending to prevent shadowing during replacement
+    sorted_placeholders = sorted(placeholder_to_value.items(), key=lambda x: len(x[0]), reverse=True)
+
+    for placeholder, val in sorted_placeholders:
         resolved_filename = resolved_filename.replace(f"{{{placeholder}}}", val)
 
     output_dir = os.path.dirname(output_vdf_path)
@@ -260,18 +264,23 @@ def generate_amica_vdf(base_template_path, new_csv_path, static_json_path, mappi
 
             modified = False
 
-            # Replace both braced {placeholder} and direct placeholder in VDF content
+            # First, check for exact match of the entire decoded text with a placeholder
+            exact_match_found = False
             for placeholder, val in placeholder_to_value.items():
-                braced_placeholder = f"{{{placeholder}}}"
-
-                # Check for braced version first to avoid partial replacements if possible
-                if braced_placeholder in decoded_text:
-                    decoded_text = decoded_text.replace(braced_placeholder, val)
+                if decoded_text == placeholder:
+                    decoded_text = val
                     modified = True
+                    exact_match_found = True
+                    break
 
-                if placeholder in decoded_text:
-                    decoded_text = decoded_text.replace(placeholder, val)
-                    modified = True
+            if not exact_match_found:
+                # If no exact match, replace braced {placeholder} patterns
+                # using sorted placeholders to prevent shadowing (e.g., {P_long} vs {P})
+                for placeholder, val in sorted_placeholders:
+                    braced_placeholder = f"{{{placeholder}}}"
+                    if braced_placeholder in decoded_text:
+                        decoded_text = decoded_text.replace(braced_placeholder, val)
+                        modified = True
 
             if modified:
                 new_hex = string_to_hex(decoded_text)
