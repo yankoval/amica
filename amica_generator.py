@@ -5,6 +5,8 @@ import json
 import re
 import argparse
 import logging
+import urllib.request
+import urllib.error
 from logging.handlers import RotatingFileHandler
 from datetime import datetime
 
@@ -15,6 +17,39 @@ handler = RotatingFileHandler("amica_generator.log", maxBytes=1*1024*1024, backu
 formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 handler.setFormatter(formatter)
 logger.addHandler(handler)
+
+def is_url(path_or_url):
+    """Checks if a string is an HTTP/HTTPS URL."""
+    return path_or_url.startswith(("http://", "https://"))
+
+def ensure_local(path_or_url, cache_dir=".amica_cache"):
+    """Returns a local file path. Downloads if it's a URL and not cached."""
+    if not is_url(path_or_url):
+        return path_or_url
+
+    if not os.path.exists(cache_dir):
+        os.makedirs(cache_dir)
+
+    # Use a hash of the URL to create a unique filename in the cache
+    url_hash = hashlib.md5(path_or_url.encode('utf-8')).hexdigest()
+    # Try to preserve extension if possible for better debugging
+    ext = os.path.splitext(path_or_url)[1]
+    if '?' in ext:
+        ext = ext.split('?')[0]
+
+    local_path = os.path.join(cache_dir, f"{url_hash}{ext}")
+
+    if not os.path.exists(local_path):
+        logger.info(f"Downloading {path_or_url} to {local_path}...")
+        try:
+            with urllib.request.urlopen(path_or_url) as response:
+                with open(local_path, 'wb') as f:
+                    f.write(response.read())
+        except (urllib.error.URLError, urllib.error.HTTPError) as e:
+            logger.error(f"Failed to download {path_or_url}: {e}")
+            raise ValueError(f"Could not download file from URL: {path_or_url}. Error: {e}")
+
+    return local_path
 
 def calculate_md5(file_path):
     """Calculates MD5 hash of a file for the DataSource section in VDF."""
@@ -110,15 +145,21 @@ def apply_transformations(value, transformations):
 def generate_amica_vdf(base_template_path, new_csv_path, static_json_path, mapping_json_path, output_vdf_path, filename_mask="{OriginalFileName}"):
     """Main function to generate VDF by substituting static and dynamic data."""
 
+    # Ensure all input files are local (download if they are URLs)
+    local_template_path = ensure_local(base_template_path)
+    local_csv_path = ensure_local(new_csv_path)
+    local_static_json_path = ensure_local(static_json_path)
+    local_mapping_json_path = ensure_local(mapping_json_path)
+
     # 1. Calculate MD5 and row count of the new CSV file
-    new_md5 = calculate_md5(new_csv_path)
-    record_count = count_csv_rows(new_csv_path)
+    new_md5 = calculate_md5(local_csv_path)
+    record_count = count_csv_rows(local_csv_path)
 
     # 2. Load data
-    with open(static_json_path, 'r', encoding='utf-8') as f:
+    with open(local_static_json_path, 'r', encoding='utf-8') as f:
         static_data = json.load(f)
 
-    with open(mapping_json_path, 'r', encoding='utf-8') as f:
+    with open(local_mapping_json_path, 'r', encoding='utf-8') as f:
         mapping_list = json.load(f)
 
     if not isinstance(mapping_list, list):
@@ -197,20 +238,25 @@ def generate_amica_vdf(base_template_path, new_csv_path, static_json_path, mappi
         placeholder_to_value[placeholder] = str(val)
 
     # 2.2 Resolve output filename
-    original_filename = os.path.basename(output_vdf_path)
-    resolved_filename = filename_mask.replace("{OriginalFileName}", original_filename)
-
     # Sort placeholders by length descending to prevent shadowing during replacement
     sorted_placeholders = sorted(placeholder_to_value.items(), key=lambda x: len(x[0]), reverse=True)
 
-    for placeholder, val in sorted_placeholders:
-        resolved_filename = resolved_filename.replace(f"{{{placeholder}}}", val)
+    if is_url(output_vdf_path):
+        if filename_mask != "{OriginalFileName}":
+            logger.warning("Warning: --filename-mask is ignored when --output is a URL.")
+        final_output_path = "temp_output.vdf"
+    else:
+        original_filename = os.path.basename(output_vdf_path)
+        resolved_filename = filename_mask.replace("{OriginalFileName}", original_filename)
 
-    output_dir = os.path.dirname(output_vdf_path)
-    final_output_path = os.path.join(output_dir, resolved_filename)
+        for placeholder, val in sorted_placeholders:
+            resolved_filename = resolved_filename.replace(f"{{{placeholder}}}", val)
+
+        output_dir = os.path.dirname(output_vdf_path)
+        final_output_path = os.path.join(output_dir, resolved_filename)
 
     # 3. Parse VDF template (XML)
-    tree = ET.parse(base_template_path)
+    tree = ET.parse(local_template_path)
     root = tree.getroot()
 
     # 4. Update dynamic part (CSV path and MD5)
@@ -304,8 +350,30 @@ def generate_amica_vdf(base_template_path, new_csv_path, static_json_path, mappi
     with open(final_output_path, "w", encoding="utf-8") as f:
         f.write(xml_str)
 
+    # 8. Upload to URL if output is a URL
+    if is_url(output_vdf_path):
+        logger.info(f"Uploading generated VDF to {output_vdf_path}...")
+        try:
+            with open(final_output_path, 'rb') as f:
+                data = f.read()
+
+            request = urllib.request.Request(output_vdf_path, data=data, method='PUT')
+            with urllib.request.urlopen(request) as response:
+                status = response.getcode()
+                logger.info(f"Upload successful. HTTP Status: {status}")
+        except (urllib.error.URLError, urllib.error.HTTPError) as e:
+            logger.error(f"Failed to upload to {output_vdf_path}: {e}")
+            raise ValueError(f"Could not upload file to URL: {output_vdf_path}. Error: {e}")
+        finally:
+            # We use a fixed 'temp_output.vdf' for URL outputs, we can remove it here
+            if os.path.exists(final_output_path):
+                os.remove(final_output_path)
+
     logger.info(f"---")
-    logger.info(f"[*] File successfully created: {os.path.basename(final_output_path)}")
+    if is_url(output_vdf_path):
+        logger.info(f"[*] File successfully uploaded to: {output_vdf_path}")
+    else:
+        logger.info(f"[*] File successfully created: {os.path.basename(final_output_path)}")
     logger.info(f"[*] Used CSV: {os.path.basename(new_csv_path)}")
     logger.info(f"[*] MD5: {new_md5}")
 
