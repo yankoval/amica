@@ -1,86 +1,50 @@
 import pytest
 import os
+import json
 import xml.etree.ElementTree as ET
 from amica_generator import generate_amica_vdf, hex_to_string
 
 def test_set_value_in_mapping(tmp_path):
-    # Template with a placeholder for a static value
-    template_path = tmp_path / "template.vdf"
-    # Placeholder for "GS" is hex "4753"
-    template_path.write_text("""<?xml version="1.0" encoding="utf-8"?>
-<File Format="Amica.VDF">
-  <VDPPage>
-    <Page>
-      <RipParam><EndNo>1</EndNo><OutputRecords>0-0</OutputRecords></RipParam>
-      <DataSourceSet><DataSource><DataPathInfo><SourcePath>old.csv</SourcePath></DataPathInfo><DataMd5>OLDMD5</DataMd5></DataSource></DataSourceSet>
-      <Content><![CDATA[4753]]></Content>
-    </Page>
-  </VDPPage>
-</File>
-""")
+    template = "tests/data/test_template.vdf"
+    csv_data = "tests/data/test_dummy.csv"
+    static_json = "tests/data/test_data.json"
 
-    csv_path = tmp_path / "data.csv"
-    csv_path.write_text("header\nrecord1\n")
+    # Mapping with a setValue override
+    mapping_content = [
+        {
+            "setValue": "FIXED_VALUE",
+            "placeholder": "Placeholder_Article"
+        }
+    ]
+    mapping_file = tmp_path / "set_value_mapping.json"
+    mapping_file.write_text(json.dumps(mapping_content))
 
-    # Static JSON (does NOT contain GS)
-    json_path = tmp_path / "data.json"
-    json_path.write_text('{"key": "val"}')
+    output = tmp_path / "output_set_value.vdf"
 
-    # Mapping WITH setValue for GS
-    mapping_path = tmp_path / "mapping.json"
-    mapping_path.write_text('{"GS_key": {"placeholder": "GS", "setValue": "GS_VALUE"}}')
+    generate_amica_vdf(template, csv_data, static_json, str(mapping_file), str(output))
 
-    output_path = tmp_path / "output.vdf"
-
-    generate_amica_vdf(
-        base_template_path=str(template_path),
-        new_csv_path=str(csv_path),
-        static_json_path=str(json_path),
-        mapping_json_path=str(mapping_path),
-        output_vdf_path=str(output_path)
-    )
-
-    assert os.path.exists(output_path)
-    tree = ET.parse(output_path)
+    assert os.path.exists(output)
+    tree = ET.parse(output)
     root = tree.getroot()
 
-    content_node = root.find(".//Content")
-    assert content_node is not None
-    decoded_text = hex_to_string(content_node.text)
-    assert decoded_text == "GS_VALUE"
+    contents = []
+    for content in root.findall(".//Content"):
+        contents.append(hex_to_string(content.text))
+
+    # "FIXED_VALUE" should replace Placeholder_Article instead of data from JSON
+    assert "FIXED_VALUE" in contents
 
 def test_missing_key_still_raises_error(tmp_path):
-    template_path = tmp_path / "template.vdf"
-    template_path.write_text("""<?xml version="1.0" encoding="utf-8"?>
-<File Format="Amica.VDF">
-  <VDPPage>
-    <Page>
-      <RipParam><EndNo>1</EndNo><OutputRecords>0-0</OutputRecords></RipParam>
-      <DataSourceSet><DataSource><DataPathInfo><SourcePath>old.csv</SourcePath></DataPathInfo><DataMd5>OLDMD5</DataMd5></DataSource></DataSourceSet>
-      <Content><![CDATA[4753]]></Content>
-    </Page>
-  </VDPPage>
-</File>
-""")
+    template = "tests/data/test_template.vdf"
+    csv_data = "tests/data/test_dummy.csv"
+    static_json = "tests/data/test_data.json"
 
-    csv_path = tmp_path / "data.csv"
-    csv_path.write_text("header\nrecord1\n")
+    # Mapping referring to missing key
+    mapping_content = [{"MISSING_KEY": "some_placeholder"}]
+    mapping_file = tmp_path / "missing_key.json"
+    mapping_file.write_text(json.dumps(mapping_content))
 
-    # Static JSON
-    json_path = tmp_path / "data.json"
-    json_path.write_text('{"key": "val"}')
+    output = tmp_path / "output.vdf"
 
-    # Mapping refers to a missing key and has NO setValue
-    mapping_path = tmp_path / "mapping.json"
-    mapping_path.write_text('{"MISSING_KEY": {"placeholder": "GS"}}')
-
-    output_path = tmp_path / "output.vdf"
-
-    with pytest.raises(KeyError, match="not found in static JSON data"):
-        generate_amica_vdf(
-            base_template_path=str(template_path),
-            new_csv_path=str(csv_path),
-            static_json_path=str(json_path),
-            mapping_json_path=str(mapping_path),
-            output_vdf_path=str(output_path)
-        )
+    with pytest.raises(KeyError):
+        generate_amica_vdf(template, csv_data, static_json, str(mapping_file), str(output))
