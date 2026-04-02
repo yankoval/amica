@@ -19,13 +19,20 @@ handler.setFormatter(formatter)
 logger.addHandler(handler)
 
 def is_url(path_or_url):
-    """Checks if a string is an HTTP/HTTPS URL."""
-    return path_or_url.startswith(("http://", "https://"))
+    """Checks if a string is an HTTP/HTTPS URL. Handles backslashes."""
+    if not path_or_url:
+        return False
+    # Normalize backslashes to forward slashes for checking
+    normalized = path_or_url.replace("\\", "/")
+    return normalized.startswith(("http://", "https://"))
 
 def ensure_local(path_or_url, cache_dir=".amica_cache"):
     """Returns a local file path. Downloads if it's a URL and not cached."""
     if not is_url(path_or_url):
         return path_or_url
+
+    # Normalize URL (replace backslashes with forward slashes)
+    path_or_url = path_or_url.replace("\\", "/")
 
     if not os.path.exists(cache_dir):
         os.makedirs(cache_dir)
@@ -352,6 +359,8 @@ def generate_amica_vdf(base_template_path, new_csv_path, static_json_path, mappi
 
     # 8. Upload to URL if output is a URL
     if is_url(output_vdf_path):
+        # Normalize output URL
+        output_vdf_path = output_vdf_path.replace("\\", "/")
         logger.info(f"Uploading generated VDF to {output_vdf_path}...")
         try:
             with open(final_output_path, 'rb') as f:

@@ -7,8 +7,26 @@ import urllib.error
 def test_is_url():
     assert is_url("http://example.com/test.json")
     assert is_url("https://example.com/test.json")
+    assert is_url("https:\\\\storage.yandexcloud.net\\test.json")
     assert not is_url("C:\\path\\to\\file.json")
     assert not is_url("/usr/local/bin/file.json")
+
+@patch("urllib.request.urlopen")
+def test_ensure_local_mangled_url(mock_urlopen, tmp_path):
+    # Setup mock response
+    mock_response = MagicMock()
+    mock_response.read.return_value = b'mangled data'
+    mock_response.__enter__.return_value = mock_response
+    mock_urlopen.return_value = mock_response
+
+    mangled_url = "https:\\\\example.com\\path\\data.json"
+    normalized_url = "https://example.com/path/data.json"
+    cache_dir = tmp_path / ".amica_cache_mangled"
+
+    local_path = ensure_local(mangled_url, cache_dir=str(cache_dir))
+
+    assert os.path.exists(local_path)
+    mock_urlopen.assert_called_once_with(normalized_url)
 
 @patch("urllib.request.urlopen")
 def test_ensure_local_download(mock_urlopen, tmp_path):
