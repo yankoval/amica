@@ -7,6 +7,7 @@ import argparse
 import logging
 import urllib.request
 import urllib.error
+import tempfile
 from logging.handlers import RotatingFileHandler
 from datetime import datetime
 
@@ -24,7 +25,8 @@ def is_url(path_or_url):
         return False
     # Normalize backslashes to forward slashes for checking
     normalized = path_or_url.replace("\\", "/")
-    return normalized.startswith(("http://", "https://"))
+    # A mangled URL like https:\ would become https:/
+    return normalized.startswith(("http://", "https://", "http:/", "https:/"))
 
 def ensure_local(path_or_url, cache_dir=".amica_cache"):
     """Returns a local file path. Downloads if it's a URL and not cached."""
@@ -33,6 +35,9 @@ def ensure_local(path_or_url, cache_dir=".amica_cache"):
 
     # Normalize URL (replace backslashes with forward slashes)
     path_or_url = path_or_url.replace("\\", "/")
+    # Fix protocol if it was mangled (e.g., https:/ instead of https://)
+    if "://" not in path_or_url:
+        path_or_url = path_or_url.replace(":/", "://", 1)
 
     if not os.path.exists(cache_dir):
         os.makedirs(cache_dir)
@@ -251,7 +256,9 @@ def generate_amica_vdf(base_template_path, new_csv_path, static_json_path, mappi
     if is_url(output_vdf_path):
         if filename_mask != "{OriginalFileName}":
             logger.warning("Warning: --filename-mask is ignored when --output is a URL.")
-        final_output_path = "temp_output.vdf"
+        # Create a temporary file that will be cleaned up later
+        fd, final_output_path = tempfile.mkstemp(suffix=".vdf")
+        os.close(fd)
     else:
         original_filename = os.path.basename(output_vdf_path)
         resolved_filename = filename_mask.replace("{OriginalFileName}", original_filename)
@@ -361,6 +368,9 @@ def generate_amica_vdf(base_template_path, new_csv_path, static_json_path, mappi
     if is_url(output_vdf_path):
         # Normalize output URL
         output_vdf_path = output_vdf_path.replace("\\", "/")
+        # Fix protocol if it was mangled (e.g., https:/ instead of https://)
+        if "://" not in output_vdf_path:
+            output_vdf_path = output_vdf_path.replace(":/", "://", 1)
         logger.info(f"Uploading generated VDF to {output_vdf_path}...")
         try:
             with open(final_output_path, 'rb') as f:

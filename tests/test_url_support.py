@@ -8,6 +8,7 @@ def test_is_url():
     assert is_url("http://example.com/test.json")
     assert is_url("https://example.com/test.json")
     assert is_url("https:\\\\storage.yandexcloud.net\\test.json")
+    assert is_url("https:\\storage.yandexcloud.net\\test.json")
     assert not is_url("C:\\path\\to\\file.json")
     assert not is_url("/usr/local/bin/file.json")
 
@@ -19,6 +20,7 @@ def test_ensure_local_mangled_url(mock_urlopen, tmp_path):
     mock_response.__enter__.return_value = mock_response
     mock_urlopen.return_value = mock_response
 
+    # Test double backslashes
     mangled_url = "https:\\\\example.com\\path\\data.json"
     normalized_url = "https://example.com/path/data.json"
     cache_dir = tmp_path / ".amica_cache_mangled"
@@ -27,6 +29,15 @@ def test_ensure_local_mangled_url(mock_urlopen, tmp_path):
 
     assert os.path.exists(local_path)
     mock_urlopen.assert_called_once_with(normalized_url)
+
+    # Test single backslash (as seen in user report)
+    mock_urlopen.reset_mock()
+    mangled_url_single = "https:\\example.com\\path\\data2.json"
+    normalized_url_single = "https://example.com/path/data2.json"
+
+    local_path_single = ensure_local(mangled_url_single, cache_dir=str(cache_dir))
+    assert os.path.exists(local_path_single)
+    mock_urlopen.assert_called_once_with(normalized_url_single)
 
 @patch("urllib.request.urlopen")
 def test_ensure_local_download(mock_urlopen, tmp_path):
